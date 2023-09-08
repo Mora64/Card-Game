@@ -19,7 +19,9 @@ TagManager:
   - Table
   - BattleGroundPlay
   - BattleGroundShop
-  - CardsOfPLayer
+  - CardShopPlaces
+  - CardsOfPlayer
+  - Hand
   layers:
   - Default
   - TransparentFX

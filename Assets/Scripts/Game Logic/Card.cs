@@ -10,9 +10,10 @@ public class Card
     public int health;
     public int idOfAbility;
     public int level;
-    public int IdOfAbility;
     CardSpeciallAbility[] cardSpeciallAbilities;
     public Sprite spriteImage;
+    public State state;
+
     public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, CardSpeciallAbility[] _cardSpeciallAbilities, Sprite _sprite)
     {
         name = _name;
@@ -20,7 +21,7 @@ public class Card
         attack = _attack;
         health = _health;
         level = _level;
-        IdOfAbility = _IdOfAbility;
+        idOfAbility = _IdOfAbility;
         cardSpeciallAbilities = _cardSpeciallAbilities;
         spriteImage = _sprite;
     }
@@ -32,6 +33,13 @@ public class Card
         AtTheStart,
         Provocation,
         Schield
+    }
+    public enum State
+    {
+        ShopCard,
+        HandCard,
+        BattleGroundCard,
+        None
     }
 
 }

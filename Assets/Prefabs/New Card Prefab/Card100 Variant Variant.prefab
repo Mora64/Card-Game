@@ -42,15 +42,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 95201404743355070, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 95201404743355070, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 95201404743355070, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 95201404743355070, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
       propertyPath: m_LocalPosition.x
@@ -100,6 +100,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95201404743355070, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1260584262985582321, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
       propertyPath: m_text
       value: it is Pouch
@@ -136,7 +140,8 @@ PrefabInstance:
       propertyPath: m_OverridePixelPerfect
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2423205358474184278, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -148,7 +153,10 @@ PrefabInstance:
       addedObject: {fileID: -627579849335747547}
     - targetCorrespondingSourceObject: {fileID: 4439892925146040161, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -392327031289165994}
+      addedObject: {fileID: 3541744273032641884}
+    - targetCorrespondingSourceObject: {fileID: 4439892925146040161, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3779033821826229213}
   m_SourcePrefab: {fileID: 100100000, guid: e40c80daebcab4324a43d5f14a5b2573, type: 3}
 --- !u!1 &1580097387728057595 stripped
 GameObject:
@@ -217,7 +225,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &-392327031289165994
+--- !u!114 &3541744273032641884
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,14 +234,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1580097387728057595}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 110a75d72e3064e74923c85d721d3ee6, type: 3}
+  m_Script: {fileID: 11500000, guid: a7f0c56868b2d4be699cc6c641676e60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
-  description: 
-  attack: 0
-  health: 0
-  idOfAbility: 0
-  level: 0
-  IdOfAbility: 0
-  shopCard: 0
+--- !u!114 &3779033821826229213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580097387728057595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88fcee288435e9d46a9c52b6ec7dd4f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
