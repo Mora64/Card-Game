@@ -25,6 +25,7 @@ public class UpdateShop : MonoBehaviour
 
     public void ShopUpdate()
     {
+        Character.money--;
         print("update shop");
         foreach (Transform child in battleGroundShop.GetChild(0))
         {
@@ -39,6 +40,8 @@ public class UpdateShop : MonoBehaviour
 
             Card currentCard = GameProcess.currentCardsInShop[i];
             GameObject cardToShop = ReadCard(currentCard, cardPrefabCopy);
+            CardState state = cardToShop.GetComponent<CardState>();
+            state.state = CardState.State.ShopCard;
             Instantiate(cardToShop, battleGroundShop.GetChild(0).GetChild(i));
         }
 

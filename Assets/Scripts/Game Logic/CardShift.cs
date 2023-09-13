@@ -7,8 +7,7 @@ public class CardShift : MonoBehaviour
 {
    
     public GameObject CharacterCardPlaces;
-    public GameObject Hand;
-    private Transform t;
+    public GameObject hand;
     private List<GameObject> Cards;
     private List<GameObject> CardPlaces;
     private float smoothTime = 0.05f;
@@ -16,28 +15,17 @@ public class CardShift : MonoBehaviour
     {
         Cards = new List<GameObject>();
         CardPlaces = new List<GameObject>();
-
-/*
-        foreach (Transform child in CharacterCardPlaces.transform)
-        {
-
-            GameObject card = child.GetChild(0).gameObject;
-            Cards.Add(card);
-            CardPlaces.Add(child.gameObject);
-
-        }*/
-
     }
-    public void CardMoving(char flag)
+    public void CardMoving()
     {
 
         Cards.Clear();
         CardPlaces.Clear();
        
-        if (flag == 'b') t = CharacterCardPlaces.transform;
-        if(flag == 'h') t = Hand.transform;
+        
+   
 
-        foreach (Transform child in t)
+        foreach (Transform child in CharacterCardPlaces.transform)
         {
             if(child.childCount == 0) continue;
             GameObject card = child.GetChild(0).gameObject;
@@ -62,4 +50,5 @@ public class CardShift : MonoBehaviour
             yield return null;
         }
     }
+    
 }

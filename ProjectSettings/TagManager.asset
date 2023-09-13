@@ -59,3 +59,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Grid
+    uniqueID: 410758289
+    locked: 0
+  - name: Card Place
+    uniqueID: 672302731
+    locked: 0
+  - name: Card Image
+    uniqueID: 888819459
+    locked: 0
