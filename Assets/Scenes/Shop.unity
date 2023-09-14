@@ -313,11 +313,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!1 &140059855 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4343700491377485187, guid: 8f4a4ec4d77b3fc44bcbffbe7e7e0fd1, type: 3}
-  m_PrefabInstance: {fileID: 7670703516677283991}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &140059856 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 92956866111567314, guid: 8f4a4ec4d77b3fc44bcbffbe7e7e0fd1, type: 3}
@@ -1826,6 +1821,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8027583509895369278, guid: 552a60e96231b4648af1069a9df813ed, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1967466890}
+    - targetCorrespondingSourceObject: {fileID: 8027583509895369278, guid: 552a60e96231b4648af1069a9df813ed, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1967466891}
   m_SourcePrefab: {fileID: 100100000, guid: 552a60e96231b4648af1069a9df813ed, type: 3}
 --- !u!224 &1967466886 stripped
 RectTransform:
@@ -1880,7 +1878,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterCardPlaces: {fileID: 682996741}
-  Hand: {fileID: 140059855}
+  hand: {fileID: 0}
+--- !u!114 &1967466891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967466887}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30cd8cded9a2b4930bcad09036d0c465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &2928832549462387022
 Transform:
   m_ObjectHideFlags: 0

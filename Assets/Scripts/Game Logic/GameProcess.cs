@@ -18,7 +18,8 @@ public class GameProcess : MonoBehaviour
     public static float HandZone = -2.5f;
     public static float BattleGroundZone = 0.35f;
     public static float ShopZone = 3f;
-    
+
+
     
     private void Awake()
     {
