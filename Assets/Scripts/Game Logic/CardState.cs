@@ -5,7 +5,8 @@ using UnityEngine;
 public class CardState : MonoBehaviour
 {
    public State state;
-    public bool moveable = true;
+   public bool moveable = true;
+    public bool scalable = false;
    public enum State{
         ShopCard,
         HandCard,

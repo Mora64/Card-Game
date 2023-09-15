@@ -33,6 +33,8 @@ public class DisplayCards : MonoBehaviour
                     GameObject cardToShop = ReadCard(currentCard, _cardPrefabCopy);    
                     CardState state = cardToShop.GetComponent<CardState>();
                     state.state = CardState.State.ShopCard;
+                    state.moveable = true;
+                    state.scalable = false;
                     Instantiate(cardToShop, _battleGroundShop.GetChild(0).GetChild(i));
                 }
 
@@ -43,6 +45,8 @@ public class DisplayCards : MonoBehaviour
                     GameObject cardOfCharacter = ReadCard(currentCard, _cardPrefabCopy);
                     CardState state = cardOfCharacter.GetComponent<CardState>();
                     state.state = CardState.State.HandCard;
+                    state.moveable = true;
+                    state.scalable = true;
                     Instantiate(cardOfCharacter, _battleGroundShop.GetChild(4).GetChild(i));
                 }
                 break;
