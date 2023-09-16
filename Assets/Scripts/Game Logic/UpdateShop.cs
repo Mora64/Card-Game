@@ -20,19 +20,17 @@ public class UpdateShop : MonoBehaviour
     void Start()
     {
         cardPrefabCopy = cardPrefab;
-        battleGroundShop  = GameObject.FindGameObjectWithTag("BattleGroundShop").transform;
+
     }
 
     public void ShopUpdate()
     {
         Character.money--;
         print("update shop");
-        foreach (Transform child in battleGroundShop.GetChild(0))
+        GameProcess.ShopCards.Clear();
+        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("Shop-Card"))
         {
-            foreach (Transform child1 in child)
-            {
-                Destroy(child1.gameObject);
-            }
+            Destroy(obj.gameObject);
         }
         Shop.UpdateShop();
         for (int i = 0; i < GameProcess.amountOfCardInShop; i++)
@@ -42,9 +40,13 @@ public class UpdateShop : MonoBehaviour
             GameObject cardToShop = ReadCard(currentCard, cardPrefabCopy);
             CardState state = cardToShop.GetComponent<CardState>();
             state.state = CardState.State.ShopCard;
-            Instantiate(cardToShop, battleGroundShop.GetChild(0).GetChild(i));
+            cardToShop.tag = "Shop-Card";
+            GameProcess.ShopCards.Add(cardToShop);
         }
-
+        for(int i = 0; i < GameProcess.ShopCards.Count; i++)
+        {
+            Instantiate(GameProcess.ShopCards[i], GameProcess.getPlaceToCard('s', i + 1), GameProcess.ShopCards[i].transform.rotation);
+        }
 
     }
     public GameObject ReadCard(Card card, GameObject cardPrefabCopy)

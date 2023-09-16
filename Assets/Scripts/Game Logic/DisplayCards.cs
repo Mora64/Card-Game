@@ -16,7 +16,6 @@ public class DisplayCards : MonoBehaviour
     private TextMeshProUGUI _cardAttack;
     private TextMeshProUGUI _cardHealth;
     private TextMeshProUGUI _cardLevel;
-  
     void Awake()
     {
         _cardPrefabCopy = _cardPrefab;
@@ -24,11 +23,7 @@ public class DisplayCards : MonoBehaviour
         {
 
             case "Shop":
-                GameObject empt = new GameObject();
-                GameObject n = Instantiate(empt, GameProcess.getPlaceToCard('h', 2), empt.transform.rotation);
-                print(n.transform.position);
-
-                _battleGroundShop = GameObject.FindGameObjectWithTag("BattleGroundShop").transform;
+         
 
                 //Displaying card in shop
                 for (int i = 0; i < GameProcess.amountOfCardInShop; i++)
@@ -39,10 +34,14 @@ public class DisplayCards : MonoBehaviour
                     state.state = CardState.State.ShopCard;
                     state.moveable = true;
                     state.scalable = false;
-                    Instantiate(cardToShop, _battleGroundShop.GetChild(0).GetChild(i));
-                    
+                    cardToShop.tag = "Shop-Card";
+                    GameProcess.ShopCards.Add(cardToShop);    
                 }
-               
+         
+                
+                for (int i = 0; i < GameProcess.ShopCards.Count; i++)
+                   Instantiate(GameProcess.ShopCards[i], GameProcess.getPlaceToCard('s', i + 1), GameProcess.ShopCards[i].transform.rotation);
+                    
                 //Displaying cards of Character
                 for (int i = 0; i < Character.Cards.Count; i++)
                 {
@@ -52,20 +51,16 @@ public class DisplayCards : MonoBehaviour
                     state.state = CardState.State.HandCard;
                     state.moveable = true;
                     state.scalable = true;
-                    Instantiate(cardOfCharacter, _battleGroundShop.GetChild(4).GetChild(i));
+                    cardOfCharacter.tag = "Hand-Card";
+                    GameProcess.HandCards.Add(cardOfCharacter);
                 }
+
+               
+                for (int i = 0; i < GameProcess.HandCards.Count; i++)
+                   Instantiate(GameProcess.HandCards[i], GameProcess.getPlaceToCard('h', i + 1), GameProcess.HandCards[i].transform.rotation);
                 break;
             case "Play":
-                _battleGroundPlay = GameObject.FindGameObjectWithTag("BattleGroundPlay").transform;
-
-                //Displaying cards of Character
-                for (int i = 0; i < Character.Cards.Count; i++)
-                {
-                    Card currentCard = Character.Cards[i];
-                    GameObject cardOfCharacter = ReadCard(currentCard, _cardPrefabCopy);
-                    Instantiate(cardOfCharacter, _battleGroundPlay.GetChild(0).GetChild(i));
-                }
-                break;
+       
             default:
                 print("Something went wrong in DisplayCards.cs/switch");
                 break;

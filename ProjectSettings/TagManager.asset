@@ -22,6 +22,9 @@ TagManager:
   - CardShopPlaces
   - CardsOfPlayer
   - Hand
+  - Shop-Card
+  - Battleground-Card
+  - Hand-Card
   layers:
   - Default
   - TransparentFX

@@ -19,8 +19,8 @@ public class GameProcess : MonoBehaviour
     public static float BattleGroundZone = 0.35f;
     public static float ShopZone = 3f;
     //Card size
-    private static float CARDHEIGHT = 2.16f;
-    private static float CARDWIDTH = 1.48f;
+    private static float CARDHEIGHT = 3f;
+    private static float CARDWIDTH = 2.10f;
     private static float SPACING = 0.835f;
 
     //card grid positions;
@@ -33,6 +33,10 @@ public class GameProcess : MonoBehaviour
     public static List<GameObject> ShopCards;
     public static List<GameObject> BattleGroundCards;
     public static List<GameObject> HandCards;
+
+    
+
+    public static int amountOfCardsInShop;
 
     private void Awake()
     {
@@ -74,21 +78,21 @@ public class GameProcess : MonoBehaviour
     }
     public static Vector2 getPlaceToCard(char flag, int position) // flags: s = shop, b = battleground, h = hand
     {
-        int amount = 2;
+        int amount = 0;
         Vector2 start = new Vector2();
         switch (flag)
         {
             case 's':
                 start = shopGridPosition;
-                //amount = ShopCards.Count;
+                amount = ShopCards.Count;
                 break;
             case 'b':
                 start = battlegroundGridPosition;
-                //amount = BattleGroundCards.Count;
+                amount = BattleGroundCards.Count;
                 break;
             case 'h':
                 start = handGridPosition;
-                //amount = HandCards.Count;
+                amount = HandCards.Count;
                 break;
             default:
                 print("Something went wrong in gameProcess/switch");
@@ -108,10 +112,35 @@ public class GameProcess : MonoBehaviour
                 leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2));
                 break;
         }
+        
         return new Vector2(leftGridCorner.x + (position - 1) * CARDWIDTH + (SPACING * (position - 1)) + CARDWIDTH / 2, start.y);
     }
 
+    public static List<Vector2>CardShift(char flag)
+    {
+        List<Vector2> places = new List<Vector2>();
+        
+        switch (flag)
+        {
+            case 's':
+                for (int i = 0; i < ShopCards.Count; i++)
+                {
+                    places.Add(getPlaceToCard('s', i+1));
+                }
+                
+                break;
+            case 'h':
+                for (int i = 0; i < HandCards.Count; i++)
+                {
+                    places.Add(getPlaceToCard('h', i + 1));
+                }             
+                break;
+        }
+        return places;
+        
 
+    }
+    
 }
 
 

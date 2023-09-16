@@ -18,11 +18,12 @@ public class Character : MonoBehaviour
     {
         DontDestroyOnLoad(this);
         moneyText.text = money.ToString();
-        Cards = new List<Card>();
-
-        Cards.Add(CardDataBase.cards[0]);
-        Cards.Add(CardDataBase.cards[1]);
-        Cards.Add(CardDataBase.cards[2]);
+        Cards = new List<Card>
+        {
+            CardDataBase.cards[0],
+            CardDataBase.cards[1],
+            CardDataBase.cards[2]
+        };
     }
     private void Update()
     {
