@@ -101,17 +101,9 @@ public class GameProcess : MonoBehaviour
 
         Vector2 leftGridCorner = new Vector2();
 
-        
+        getLeftCorner(amount, start);
 
-        switch (amount%2)
-        {
-            case 1:
-                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + SPACING + (CARDWIDTH / 2));
-                break;
-            case 0:
-                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2));
-                break;
-        }
+        
         
         return new Vector2(leftGridCorner.x + (position - 1) * CARDWIDTH + (SPACING * (position - 1)) + CARDWIDTH / 2, start.y);
     }
@@ -130,14 +122,31 @@ public class GameProcess : MonoBehaviour
                 
                 break;
             case 'h':
+                
                 for (int i = 0; i < HandCards.Count; i++)
                 {
-                    places.Add(getPlaceToCard('h', i + 1));
+                    
                 }             
-                break;
+                
         }
         return places;
         
+
+    }
+    private static Vector2 getLeftCorner(int amount, Vector2 start)
+    {
+        Vector2 leftGridCorner = new Vector2();
+
+        switch (amount % 2)
+        {
+            case 1:
+                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + SPACING + (CARDWIDTH / 2));
+                break;
+            case 0:
+                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2));
+                break;
+        }
+        return leftGridCorner;
 
     }
     

@@ -7,6 +7,43 @@ using UnityEngine;
 public class CardHandler : MonoBehaviour
 {
     private float cardSpeed = 4f;
+    private Vector2 tempV;
+    private Transform tempT;
+    private bool isMoving=false;
+    private char flag = 'o';
+    List<Vector2> places;
+    private void Update()
+    {
+        if (isMoving)
+        {
+
+            switch (flag)
+            {
+                case 'h':
+                    for (int i = 0; i < places.Count; i++)
+                    {
+                        /*if (i == 0)
+                        {
+                            print("Card " + GameProcess.HandCards[i].transform.position);
+                            print("PLaces " + places[i]);
+
+                        }
+*/
+                        GameProcess.HandCards[i].transform.position = Vector2.MoveTowards(GameProcess.HandCards[i].transform.position, places[i], Time.deltaTime);
+                        /*    Destroy(GameProcess.HandCards[i].transform.gameObject);*/
+                    }
+                    break;
+            }
+                
+        }
+            
+        }   
+    
+    private void Move()
+    {
+        print("Move");
+        MoveCard(tempT, tempV);
+    }
     public void CardMove(Transform card, Vector3 startCardPos)
     {
 
@@ -21,18 +58,16 @@ public class CardHandler : MonoBehaviour
                     card.GetComponent<CardState>().state = CardState.State.HandCard;
                     card.tag = "Hand-Card";
                  
-                    List<Vector2> places = GameProcess.CardShift('h');
-                    for(int i = 0; i < GameProcess.HandCards.Count; i++)
-                    {
-                        print(GameProcess.HandCards.Count);
-                        StartCoroutine(MoveCard(GameProcess.HandCards[i].transform, places[i]));
-                    }
+                    places = GameProcess.CardShift('h');
+                    
+                    isMoving = true;
+                    flag = 'h';
 
                 }
                 else
                 {
-                    print("22222");
-                    StartCoroutine(MoveCard(card, startCardPos));
+                    /*print("22222");
+                    StartCoroutine(MoveCard(card, startCardPos));*/
                 }
                 break;
 
@@ -114,15 +149,14 @@ public class CardHandler : MonoBehaviour
     //        }
 
     //}
-    IEnumerator MoveCard(Transform target, Vector3 destination)
+    void MoveCard(Transform target, Vector3 destination)
     {
         print('_');
-        print("target" + target.position);
-        print("destination " + destination);
+       /**/
         while (Vector2.Distance(target.position, destination) != 0)
         {
             target.position = Vector2.MoveTowards(target.position, destination, Time.deltaTime);
-            yield return new WaitForEndOfFrame();
+            
         }
     }
 

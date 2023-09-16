@@ -19,6 +19,7 @@ public class DisplayCards : MonoBehaviour
     void Awake()
     {
         _cardPrefabCopy = _cardPrefab;
+        List<GameObject> cardstepm = new List<GameObject>();
         switch (SceneManager.GetActiveScene().name)
         {
 
@@ -52,12 +53,12 @@ public class DisplayCards : MonoBehaviour
                     state.moveable = true;
                     state.scalable = true;
                     cardOfCharacter.tag = "Hand-Card";
+            
                     GameProcess.HandCards.Add(cardOfCharacter);
                 }
-
-               
+              
                 for (int i = 0; i < GameProcess.HandCards.Count; i++)
-                   Instantiate(GameProcess.HandCards[i], GameProcess.getPlaceToCard('h', i + 1), GameProcess.HandCards[i].transform.rotation);
+                    GameProcess.HandCards[i] = Instantiate(GameProcess.HandCards[i], GameProcess.getPlaceToCard('h', i + 1), GameProcess.HandCards[i].transform.rotation);
                 break;
             case "Play":
        

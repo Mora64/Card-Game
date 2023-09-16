@@ -24,6 +24,7 @@ public class Character : MonoBehaviour
             CardDataBase.cards[1],
             CardDataBase.cards[2]
         };
+        
     }
     private void Update()
     {
