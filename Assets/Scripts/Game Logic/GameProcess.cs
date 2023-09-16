@@ -18,9 +18,22 @@ public class GameProcess : MonoBehaviour
     public static float HandZone = -2.5f;
     public static float BattleGroundZone = 0.35f;
     public static float ShopZone = 3f;
+    //Card size
+    private static float CARDHEIGHT = 2.16f;
+    private static float CARDWIDTH = 1.48f;
+    private static float SPACING = 0.835f;
+
+    //card grid positions;
+    private static Vector2 shopGridPosition;
+    private static Vector2 battlegroundGridPosition;
+    private static Vector2 handGridPosition;
 
 
-    
+    //Lists of Cards in
+    public static List<GameObject> ShopCards;
+    public static List<GameObject> BattleGroundCards;
+    public static List<GameObject> HandCards;
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -28,7 +41,10 @@ public class GameProcess : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
 
         currentCardsInShop = new List<Card>();
-
+        ShopCards = new List<GameObject>();
+        BattleGroundCards = new List<GameObject>();
+        HandCards = new List<GameObject>();
+         
         //Music
         slider.value = 0.5f;
         _currentVolume = slider.normalizedValue;
@@ -41,8 +57,10 @@ public class GameProcess : MonoBehaviour
         Shop.cardsInShop = new List<Card>();
         Shop.UpdateShop();
 
-
-        
+        //card grid positions;
+        shopGridPosition = new Vector2(0, 1.78f);
+        battlegroundGridPosition = new Vector2(0, -1f);
+        handGridPosition = new Vector2(0, -3.64f);
 
     }
     public static void goToFightScene()
@@ -54,8 +72,46 @@ public class GameProcess : MonoBehaviour
         _currentVolume = slider.normalizedValue;
         _audioSource.volume = _currentVolume;
     }
+    public static Vector2 getPlaceToCard(char flag, int position) // flags: s = shop, b = battleground, h = hand
+    {
+        int amount = 2;
+        Vector2 start = new Vector2();
+        switch (flag)
+        {
+            case 's':
+                start = shopGridPosition;
+                //amount = ShopCards.Count;
+                break;
+            case 'b':
+                start = battlegroundGridPosition;
+                //amount = BattleGroundCards.Count;
+                break;
+            case 'h':
+                start = handGridPosition;
+                //amount = HandCards.Count;
+                break;
+            default:
+                print("Something went wrong in gameProcess/switch");
+                break;
+        }
 
-    
+        Vector2 leftGridCorner = new Vector2();
+
+        
+
+        switch (amount%2)
+        {
+            case 1:
+                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + SPACING + (CARDWIDTH / 2));
+                break;
+            case 0:
+                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2));
+                break;
+        }
+        return new Vector2(leftGridCorner.x + (position - 1) * CARDWIDTH + (SPACING * (position - 1)) + CARDWIDTH / 2, start.y);
+    }
+
+
 }
 
 

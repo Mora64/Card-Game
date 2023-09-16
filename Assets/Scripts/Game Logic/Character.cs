@@ -22,7 +22,7 @@ public class Character : MonoBehaviour
 
         Cards.Add(CardDataBase.cards[0]);
         Cards.Add(CardDataBase.cards[1]);
-       /* Cards.Add(CardDataBase.cards[2]);*/
+        Cards.Add(CardDataBase.cards[2]);
     }
     private void Update()
     {

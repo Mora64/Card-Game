@@ -56,6 +56,9 @@ public class CardHandler : MonoBehaviour
                             card.position = Vector2.MoveTowards(card.position, child.position, cardSpeed);
                             card.SetParent(child);
                             card.GetComponent<CardState>().state = CardState.State.BattleGroundCard;
+                         
+
+
                             break;
                         }
                     }
@@ -73,10 +76,8 @@ public class CardHandler : MonoBehaviour
                     HandCardShift(hand);
                     Destroy(card.gameObject);
                     Character.money++;
-
-
                 }
-                if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
+                else if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
                 {
                     cardShift.CardMoving();
                 }
@@ -90,15 +91,15 @@ public class CardHandler : MonoBehaviour
     }
     public void HandCardShift(GameObject hand)
     {
-        print("call");
+        
 
         for (int i = 0; i < hand.transform.childCount; i++)
             if (hand.transform.GetChild(i).childCount == 0)
             {
-                print("Hand0");
-
 
                 for (int j = i + 1; j < hand.transform.childCount; j++)
+                {
+                    
                     if (hand.transform.GetChild(j).childCount == 0) break;
                     else
                     {
@@ -107,7 +108,9 @@ public class CardHandler : MonoBehaviour
 
                         hand.transform.GetChild(j).GetChild(0).SetParent(hand.transform.GetChild(j - 1));
                     }
-                break;
+                    break;
+                }
+                    
             }
 
     }

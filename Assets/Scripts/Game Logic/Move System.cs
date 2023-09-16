@@ -10,9 +10,9 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private CardShift cardShift;
     private GameObject cardOfPlayer;
     private GameObject hand;
-
+    private GameObject copyOfCard;
     private Vector3 startCardPos;
-
+    private bool isScaled = false;
     private CardHandler cardHandler;
     private void Start()
     {
@@ -38,27 +38,54 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     
     public void OnPointerExit(PointerEventData eventData)
     {
-     
+        Destroy(copyOfCard);
+        isScaled = false;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+
+        if (!isScaled && GetComponent<CardState>().moveable && GetComponent<CardState>().scalable)
+        {
+            copyOfCard = Instantiate(this.gameObject);
+            copyOfCard.GetComponent<CardState>().moveable = false;
+            copyOfCard.GetComponent<CardState>().scalable = false;
+            copyOfCard.transform.localScale = new Vector2(copyOfCard.transform.localScale.x * 2, copyOfCard.transform.localScale.y * 2);
+            print(copyOfCard.transform.localScale);
+            Instantiate(copyOfCard);
+            copyOfCard.transform.SetParent(null);
+            isScaled = true;
+            print(copyOfCard.GetComponent<CardState>().moveable);
+
+        }
+
+
 
     }
    
 
 public void OnPointerUp(PointerEventData eventData)
     {
-        isBeingHeld = false;
-        cardHandler.CardMove(this.transform, hand, cardOfPlayer, cardShift, startCardPos);
+      
+        if(GetComponent<CardState>().moveable == true)
+        {
+            isBeingHeld = false;
+            cardHandler.CardMove(this.transform, hand, cardOfPlayer, cardShift, startCardPos);
+        }
+        
         
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        startCardPos = transform.position;
-        if (Input.GetMouseButton(0)) { 
-            isBeingHeld = true;
+        if(GetComponent<CardState>().moveable == true)
+        {
+            startCardPos = transform.position;
+            if (Input.GetMouseButton(0))
+            {
+                isBeingHeld = true;
+            }
         }
+        
     }
    
    

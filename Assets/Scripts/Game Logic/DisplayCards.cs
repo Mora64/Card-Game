@@ -24,6 +24,10 @@ public class DisplayCards : MonoBehaviour
         {
 
             case "Shop":
+                GameObject empt = new GameObject();
+                GameObject n = Instantiate(empt, GameProcess.getPlaceToCard('h', 2), empt.transform.rotation);
+                print(n.transform.position);
+
                 _battleGroundShop = GameObject.FindGameObjectWithTag("BattleGroundShop").transform;
 
                 //Displaying card in shop
@@ -33,9 +37,12 @@ public class DisplayCards : MonoBehaviour
                     GameObject cardToShop = ReadCard(currentCard, _cardPrefabCopy);    
                     CardState state = cardToShop.GetComponent<CardState>();
                     state.state = CardState.State.ShopCard;
+                    state.moveable = true;
+                    state.scalable = false;
                     Instantiate(cardToShop, _battleGroundShop.GetChild(0).GetChild(i));
+                    
                 }
-
+               
                 //Displaying cards of Character
                 for (int i = 0; i < Character.Cards.Count; i++)
                 {
@@ -43,6 +50,8 @@ public class DisplayCards : MonoBehaviour
                     GameObject cardOfCharacter = ReadCard(currentCard, _cardPrefabCopy);
                     CardState state = cardOfCharacter.GetComponent<CardState>();
                     state.state = CardState.State.HandCard;
+                    state.moveable = true;
+                    state.scalable = true;
                     Instantiate(cardOfCharacter, _battleGroundShop.GetChild(4).GetChild(i));
                 }
                 break;
@@ -61,7 +70,7 @@ public class DisplayCards : MonoBehaviour
                 print("Something went wrong in DisplayCards.cs/switch");
                 break;
         }
-
+      
     }
     
     
