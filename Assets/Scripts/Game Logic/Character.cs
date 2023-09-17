@@ -22,7 +22,7 @@ public class Character : MonoBehaviour
         {
             CardDataBase.cards[0],
             CardDataBase.cards[1],
-            CardDataBase.cards[2]
+
         };
         
     }

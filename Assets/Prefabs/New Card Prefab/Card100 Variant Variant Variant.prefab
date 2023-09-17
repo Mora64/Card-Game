@@ -29,6 +29,10 @@ PrefabInstance:
       value: -2.44
       objectReference: {fileID: 0}
     - target: {fileID: 510735743330878324, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
+      propertyPath: m_text
+      value: Ring
+      objectReference: {fileID: 0}
+    - target: {fileID: 510735743330878324, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
       propertyPath: m_fontColor.b
       value: 1
       objectReference: {fileID: 0}
@@ -48,6 +52,18 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -9.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1394455958640681617, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
+      propertyPath: m_text
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1942123780099663260, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
+      propertyPath: m_text
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957447915124288373, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
+      propertyPath: m_text
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 3268059272510517450, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.07
@@ -55,6 +71,10 @@ PrefabInstance:
     - target: {fileID: 3268059272510517450, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
       propertyPath: m_LocalScale.y
       value: 0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 3282737124250112973, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
+      propertyPath: m_text
+      value: it is Ring
       objectReference: {fileID: 0}
     - target: {fileID: 3282737124250112973, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
       propertyPath: m_fontColor.b
@@ -84,6 +104,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 6.3
       objectReference: {fileID: 0}
+    - target: {fileID: 5710386659143140725, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8bd45bd6e800fbe4fbc66b84f8be7b5c, type: 3}
     - target: {fileID: 5884077162681533966, guid: 43637d9c110f94780b4f83bf2d28e101, type: 3}
       propertyPath: m_Color.a
       value: 0

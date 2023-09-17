@@ -29,7 +29,7 @@ public class CardHandler : MonoBehaviour
 
                         }
 */
-                        GameProcess.HandCards[i].transform.position = Vector2.MoveTowards(GameProcess.HandCards[i].transform.position, places[i], Time.deltaTime);
+                        GameProcess.HandCards[i].transform.position = Vector2.MoveTowards(GameProcess.HandCards[i].transform.position, places[i], cardSpeed*0.01f);
                         /*    Destroy(GameProcess.HandCards[i].transform.gameObject);*/
                     }
                     break;
@@ -58,8 +58,8 @@ public class CardHandler : MonoBehaviour
                     card.GetComponent<CardState>().state = CardState.State.HandCard;
                     card.tag = "Hand-Card";
                  
-                    places = GameProcess.CardShift('h');
-                    
+                    places = GameProcess.GetNewCardPlaces('h');
+       
                     isMoving = true;
                     flag = 'h';
 

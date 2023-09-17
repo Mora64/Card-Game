@@ -21,7 +21,7 @@ public class GameProcess : MonoBehaviour
     //Card size
     private static float CARDHEIGHT = 3f;
     private static float CARDWIDTH = 2.10f;
-    private static float SPACING = 0.835f;
+    private static float SPACING = 0.84f;
 
     //card grid positions;
     private static Vector2 shopGridPosition;
@@ -64,7 +64,7 @@ public class GameProcess : MonoBehaviour
         //card grid positions;
         shopGridPosition = new Vector2(0, 1.78f);
         battlegroundGridPosition = new Vector2(0, -1f);
-        handGridPosition = new Vector2(0, -3.64f);
+        handGridPosition = new Vector2(0, -3.3f);
 
     }
     public static void goToFightScene()
@@ -101,14 +101,14 @@ public class GameProcess : MonoBehaviour
 
         Vector2 leftGridCorner = new Vector2();
 
-        getLeftCorner(amount, start);
+        leftGridCorner = getLeftCorner(amount, start);
 
         
         
         return new Vector2(leftGridCorner.x + (position - 1) * CARDWIDTH + (SPACING * (position - 1)) + CARDWIDTH / 2, start.y);
     }
 
-    public static List<Vector2>CardShift(char flag)
+    public static List<Vector2>GetNewCardPlaces(char flag)
     {
         List<Vector2> places = new List<Vector2>();
         
@@ -122,11 +122,17 @@ public class GameProcess : MonoBehaviour
                 
                 break;
             case 'h':
-                
+                Vector2 start = getLeftCorner(GameProcess.HandCards.Count, handGridPosition);
+                print(start);
+                print(GameProcess.HandCards.Count);
                 for (int i = 0; i < HandCards.Count; i++)
                 {
-                    
-                }             
+                    float temp = CARDWIDTH/2;
+                    float stemp = 0;
+                    places.Add(new Vector2(start.x + (temp + (i)*CARDWIDTH + SPACING*i), handGridPosition.y));
+                    temp += SPACING;
+                }
+                break;
                 
         }
         return places;
@@ -143,7 +149,7 @@ public class GameProcess : MonoBehaviour
                 leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + SPACING + (CARDWIDTH / 2));
                 break;
             case 0:
-                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2));
+                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2) * (amount-1));
                 break;
         }
         return leftGridCorner;
