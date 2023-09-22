@@ -1,9 +1,9 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
+
 public class GameProcess : MonoBehaviour
 {
     //Music on Background
@@ -65,7 +65,6 @@ public class GameProcess : MonoBehaviour
         shopGridPosition = new Vector2(0, 1.78f);
         battlegroundGridPosition = new Vector2(0, -1f);
         handGridPosition = new Vector2(0, -3.3f);
-
     }
     public static void goToFightScene()
     {
@@ -76,86 +75,49 @@ public class GameProcess : MonoBehaviour
         _currentVolume = slider.normalizedValue;
         _audioSource.volume = _currentVolume;
     }
-    public static Vector2 getPlaceToCard(char flag, int position) // flags: s = shop, b = battleground, h = hand
-    {
-        int amount = 0;
-        Vector2 start = new Vector2();
-        switch (flag)
-        {
-            case 's':
-                start = shopGridPosition;
-                amount = ShopCards.Count;
-                break;
-            case 'b':
-                start = battlegroundGridPosition;
-                amount = BattleGroundCards.Count;
-                break;
-            case 'h':
-                start = handGridPosition;
-                amount = HandCards.Count;
-                break;
-            default:
-                print("Something went wrong in gameProcess/switch");
-                break;
-        }
-
-        Vector2 leftGridCorner = new Vector2();
-
-        leftGridCorner = getLeftCorner(amount, start);
-
-        
-        
-        return new Vector2(leftGridCorner.x + (position - 1) * CARDWIDTH + (SPACING * (position - 1)) + CARDWIDTH / 2, start.y);
-    }
 
     public static List<Vector2>GetNewCardPlaces(char flag)
     {
         List<Vector2> places = new List<Vector2>();
-        
+        List<GameObject> currentListOfCard = new List<GameObject>();
+        Vector2 currentGridPosition = Vector2.zero;
+
         switch (flag)
         {
             case 's':
-                for (int i = 0; i < ShopCards.Count; i++)
-                {
-                    places.Add(getPlaceToCard('s', i+1));
-                }
-                
-                break;
+                currentListOfCard = ShopCards;
+                currentGridPosition = shopGridPosition;
+              break;
             case 'h':
-                Vector2 start = getLeftCorner(GameProcess.HandCards.Count, handGridPosition);
-                print(start);
-                print(GameProcess.HandCards.Count);
-                for (int i = 0; i < HandCards.Count; i++)
-                {
-                    float temp = CARDWIDTH/2;
-                    float stemp = 0;
-                    places.Add(new Vector2(start.x + (temp + (i)*CARDWIDTH + SPACING*i), handGridPosition.y));
-                    temp += SPACING;
-                }
+                currentListOfCard = HandCards;
+                currentGridPosition = handGridPosition;
                 break;
-                
+            case 'b':
+                currentListOfCard = BattleGroundCards;
+                currentGridPosition = battlegroundGridPosition;
+                break;
         }
-        return places;
-        
 
+        Vector2 start = getLeftCorner(currentListOfCard.Count, currentGridPosition);
+
+        for (int i = 0; i < currentListOfCard.Count; i++)
+            places.Add(new Vector2(start.x + (CARDWIDTH / 2 + (i) * CARDWIDTH + SPACING * i), currentGridPosition.y));
+
+        return places;
     }
     private static Vector2 getLeftCorner(int amount, Vector2 start)
     {
-        Vector2 leftGridCorner = new Vector2();
-
+        if (amount == 1) return new Vector2(start.x - CARDWIDTH / 2, 0);
         switch (amount % 2)
         {
             case 1:
-                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + SPACING + (CARDWIDTH / 2));
-                break;
+                return new Vector2(start.x - ((amount / 2) * CARDWIDTH + SPACING + (CARDWIDTH / 2)), 0);           
             case 0:
-                leftGridCorner.x = start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2) * (amount-1));
-                break;
+                return new Vector2(start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2) * (amount-1)), 0);
+            default:
+                return Vector2.zero;
         }
-        return leftGridCorner;
-
     }
-    
 }
 
 

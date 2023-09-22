@@ -16,11 +16,7 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private CardHandler cardHandler;
     private void Start()
     {
-        cardShift = GameObject.FindGameObjectWithTag("BattleGroundShop").GetComponent<CardShift>();
-
-        cardOfPlayer = GameObject.FindGameObjectWithTag("CardsOfPlayer");
-        hand = GameObject.FindGameObjectWithTag("Hand");
-        cardHandler = GameObject.FindGameObjectWithTag("BattleGroundShop").GetComponent<CardHandler>();
+        
         startCardPos = transform.position;
 
     }

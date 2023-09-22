@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 //REMAKE IT
 public class UpdateShop : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class UpdateShop : MonoBehaviour
     private TextMeshProUGUI cardHealth;
     private TextMeshProUGUI cardLevel;
 
+    private List<Vector2> places;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,7 +47,8 @@ public class UpdateShop : MonoBehaviour
         }
         for(int i = 0; i < GameProcess.ShopCards.Count; i++)
         {
-            Instantiate(GameProcess.ShopCards[i], GameProcess.getPlaceToCard('s', i + 1), GameProcess.ShopCards[i].transform.rotation);
+            places = GameProcess.GetNewCardPlaces('s');
+            GameProcess.ShopCards[i] = Instantiate(GameProcess.ShopCards[i], places[i], GameProcess.ShopCards[i].transform.rotation);
         }
 
     }

@@ -16,6 +16,7 @@ public class DisplayCards : MonoBehaviour
     private TextMeshProUGUI _cardAttack;
     private TextMeshProUGUI _cardHealth;
     private TextMeshProUGUI _cardLevel;
+    private List<Vector2> places;
     void Awake()
     {
         _cardPrefabCopy = _cardPrefab;
@@ -41,7 +42,11 @@ public class DisplayCards : MonoBehaviour
          
                 
                 for (int i = 0; i < GameProcess.ShopCards.Count; i++)
-                   Instantiate(GameProcess.ShopCards[i], GameProcess.getPlaceToCard('s', i + 1), GameProcess.ShopCards[i].transform.rotation);
+                {
+                    places = GameProcess.GetNewCardPlaces('s');
+                    GameProcess.ShopCards[i] = Instantiate(GameProcess.ShopCards[i], places[i], GameProcess.ShopCards[i].transform.rotation);
+                }
+                   
                     
                 //Displaying cards of Character
                 for (int i = 0; i < Character.Cards.Count; i++)
@@ -58,7 +63,11 @@ public class DisplayCards : MonoBehaviour
                 }
               
                 for (int i = 0; i < GameProcess.HandCards.Count; i++)
-                    GameProcess.HandCards[i] = Instantiate(GameProcess.HandCards[i], GameProcess.getPlaceToCard('h', i + 1), GameProcess.HandCards[i].transform.rotation);
+                {
+                    places = GameProcess.GetNewCardPlaces('h');
+                    GameProcess.HandCards[i] = Instantiate(GameProcess.HandCards[i], places[i], GameProcess.HandCards[i].transform.rotation);
+                }
+                    
                 break;
             case "Play":
        

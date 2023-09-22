@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,44 +7,65 @@ using UnityEngine;
 
 public class CardHandler : MonoBehaviour
 {
-    private float cardSpeed = 4f;
-    private Vector2 tempV;
-    private Transform tempT;
-    private bool isMoving=false;
+    private float cardSpeed = 0.04f;
+    private bool isMoving = false;
     private char flag = 'o';
-    List<Vector2> places;
+    private bool[] hasMoved = new bool[7];
+    private List<Vector2> places;
+    private List<GameObject> currentListOfCards;
+    private Vector2 startCardPosition = Vector2.zero;
+    private Transform currentCard;
+
     private void Update()
     {
-        if (isMoving)
+        while (isMoving)
         {
-
+            Array.Clear(hasMoved, 0, hasMoved.Length);
+            currentListOfCards = new List<GameObject>();
             switch (flag)
             {
                 case 'h':
-                    for (int i = 0; i < places.Count; i++)
-                    {
-                        /*if (i == 0)
-                        {
-                            print("Card " + GameProcess.HandCards[i].transform.position);
-                            print("PLaces " + places[i]);
-
-                        }
-*/
-                        GameProcess.HandCards[i].transform.position = Vector2.MoveTowards(GameProcess.HandCards[i].transform.position, places[i], cardSpeed*0.01f);
-                        /*    Destroy(GameProcess.HandCards[i].transform.gameObject);*/
-                    }
+                    currentListOfCards = GameProcess.HandCards;
+                    break;
+                case 's':
+                    currentListOfCards = GameProcess.ShopCards;
+                    break;
+                case 'b':
+                    currentListOfCards = GameProcess.BattleGroundCards;
+                    break;
+                default:
                     break;
             }
-                
+            if (flag == 'r')
+            {
+                currentCard.position = Vector2.MoveTowards(currentCard.position, startCardPosition, cardSpeed);
+                break;
+            }
+            for (int i = 0; i < places.Count; i++)
+            {
+                currentListOfCards[i].transform.position = Vector2.MoveTowards(currentListOfCards[i].transform.position, places[i], cardSpeed);
+                for (int j = 0; j < currentListOfCards.Count; j++)
+                    if (Vector2.Distance(currentListOfCards[j].transform.position, places[j]) == 0)
+                        hasMoved[j] = true;
+            }
+            for (int i = 0; i < currentListOfCards.Count; i++)
+            {
+                if (!hasMoved[i])
+                {
+                    isMoving = true;
+                    break;
+                }
+                else
+                {
+                    isMoving = false;
+                }
+
+            }
+
         }
-            
-        }   
-    
-    private void Move()
-    {
-        print("Move");
-        MoveCard(tempT, tempV);
+
     }
+
     public void CardMove(Transform card, Vector3 startCardPos)
     {
 
@@ -53,111 +75,98 @@ public class CardHandler : MonoBehaviour
 
                 if (card.position.y < GameProcess.HandZone)
                 {
-                 
                     GameProcess.HandCards.Add(card.gameObject);
-                    card.GetComponent<CardState>().state = CardState.State.HandCard;
-                    card.tag = "Hand-Card";
-                 
                     places = GameProcess.GetNewCardPlaces('h');
-       
                     isMoving = true;
                     flag = 'h';
-
                 }
                 else
                 {
-                    /*print("22222");
-                    StartCoroutine(MoveCard(card, startCardPos));*/
+                    ReturnToStartPosition(card, startCardPos);
                 }
                 break;
 
-            //case CardState.State.HandCard:
-            //    if (card.position.y > GameProcess.ShopZone)
-            //    {
+            case CardState.State.HandCard:
+                if (card.position.y > GameProcess.ShopZone)
+                {
 
-            //        card.SetParent(null);
-            //        Destroy(card.gameObject);
-            //        Character.money++;
-            //        HandCardShift(hand);
-            //        //MAKE CARDS IN HAND SHIFTING
-            //    }
-            //    if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
-            //    {
-            //        foreach (Transform child in cardOfPlayer.transform)
-            //        {
+                    GameProcess.HandCards.Remove(card.gameObject);
+                    Destroy(card.gameObject);
+                    Character.money++;
+                    //HandCardShift(hand);
+                    //MAKE CARDS IN HAND SHIFTING
+                }
+                if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
+                {
+                    GameProcess.HandCards.Remove(card.gameObject);
+                    GameProcess.BattleGroundCards.Add(card.gameObject);
+                    places = GameProcess.GetNewCardPlaces('b');
+                    isMoving = true;
+                    flag = 'b';
 
-            //            if (child.childCount == 0)
-            //            {
-            //                card.position = Vector2.MoveTowards(card.position, child.position, cardSpeed);
-            //                card.SetParent(child);
-            //                card.GetComponent<CardState>().state = CardState.State.BattleGroundCard;
-                         
-
-
-            //                break;
-            //            }
-            //        }
-            //        HandCardShift(hand);
-            //    }
-            //    else
-            //    {
-            //        StartCoroutine(MoveCard(card, startCardPos));
-
-            //    }
-            //    break;
-            //case CardState.State.BattleGroundCard:
-            //    if (card.position.y > GameProcess.ShopZone)
-            //    {
-            //        HandCardShift(hand);
-            //        Destroy(card.gameObject);
-            //        Character.money++;
-            //    }
-            //    else if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
-            //    {
-            //        cardShift.CardMoving();
-            //    }
-            //    else
-            //    {
-            //        StartCoroutine(MoveCard(card, startCardPos));
-
-            //    }
-            //    break;
+                    //HandCardShift(hand);
+                }
+                else
+                {
+                    ReturnToStartPosition(card, startCardPos);
+                }
+                break;
+            case CardState.State.BattleGroundCard:
+                if (card.position.y > GameProcess.ShopZone)
+                {
+                    //HandCardShift(hand);
+                    GameProcess.BattleGroundCards.Remove(card.gameObject);
+                    Destroy(card.gameObject);
+                    Character.money++;
+                }
+                else if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
+                {
+                    //cardShift.CardMoving();
+                }
+                else
+                {
+                    ReturnToStartPosition(card, startCardPos);
+                }
+                break;
         }
     }
-    //public void HandCardShift(GameObject hand)
-    //{
-        
-
-    //    for (int i = 0; i < hand.transform.childCount; i++)
-    //        if (hand.transform.GetChild(i).childCount == 0)
-    //        {
-
-    //            for (int j = i + 1; j < hand.transform.childCount; j++)
-    //            {
-                    
-    //                if (hand.transform.GetChild(j).childCount == 0) break;
-    //                else
-    //                {
-
-    //                    StartCoroutine(MoveCard(hand.transform.GetChild(j).GetChild(0), hand.transform.GetChild(j - 1).position));
-
-    //                    hand.transform.GetChild(j).GetChild(0).SetParent(hand.transform.GetChild(j - 1));
-    //                }
-    //                break;
-    //            }
-                    
-    //        }
-
-    //}
-    void MoveCard(Transform target, Vector3 destination)
+    private void ReturnToStartPosition(Transform card, Vector3 startCardPos)
     {
-        print('_');
-       /**/
-        while (Vector2.Distance(target.position, destination) != 0)
-        {
-            target.position = Vector2.MoveTowards(target.position, destination, Time.deltaTime);
-            
-        }
+        flag = 'r';
+        isMoving = true;
+        currentCard = card;
+        startCardPosition = startCardPos;
     }
 
-}
+    private void HandCardShift(char flag)
+    {
+        List<GameObject> currentListOfCard = new List<GameObject>();
+        //switch (flag)
+        //{
+        //    case 's':
+        //        currentListOfCard =
+        //}
+        //.Sort((x, y) => x.transform.position.x.CompareTo(y.transform.position.x));
+
+    }
+
+        //}
+        //    Cards.Sort((x, y) => x.transform.position.x.CompareTo(y.transform.position.x));
+
+
+        //        for (int i = 0; i<Cards.Count; i++)
+        //        {
+        //            StartCoroutine(MakeShift(Cards[i], CardPlaces[i]));
+        //}
+        //    }
+        //    IEnumerator MakeShift(GameObject currentCard, GameObject currentCardPosition)
+        //{
+
+        //    while (Vector2.Distance(currentCard.transform.position, currentCardPosition.transform.position) != 0)
+        //    {
+        //        currentCard.transform.position = Vector2.MoveTowards(currentCard.transform.position, currentCardPosition.transform.position, smoothTime);
+        //        yield return null;
+        //    }
+        //}
+        //}
+    }
