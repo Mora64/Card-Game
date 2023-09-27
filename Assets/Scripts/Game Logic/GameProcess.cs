@@ -60,11 +60,12 @@ public class GameProcess : MonoBehaviour
         //Shop
         Shop.cardsInShop = new List<Card>();
         Shop.UpdateShop();
+      
 
         //card grid positions;
-        shopGridPosition = new Vector2(0, 1.78f);
-        battlegroundGridPosition = new Vector2(0, -1f);
-        handGridPosition = new Vector2(0, -3.3f);
+        shopGridPosition = new Vector2(0, 2.3f);
+        battlegroundGridPosition = new Vector2(0, -0.28f);
+        handGridPosition = new Vector2(0, -2.8f);
     }
     public static void goToFightScene()
     {
@@ -76,7 +77,7 @@ public class GameProcess : MonoBehaviour
         _audioSource.volume = _currentVolume;
     }
 
-    public static List<Vector2>GetNewCardPlaces(char flag)
+    public static List<Vector2>GetNewCardPlaces(char flag, int a)
     {
         List<Vector2> places = new List<Vector2>();
         List<GameObject> currentListOfCard = new List<GameObject>();
@@ -98,9 +99,9 @@ public class GameProcess : MonoBehaviour
                 break;
         }
 
-        Vector2 start = getLeftCorner(currentListOfCard.Count, currentGridPosition);
+        Vector2 start = getLeftCorner(a, currentGridPosition);
 
-        for (int i = 0; i < currentListOfCard.Count; i++)
+        for (int i = 0; i < a; i++)
             places.Add(new Vector2(start.x + (CARDWIDTH / 2 + (i) * CARDWIDTH + SPACING * i), currentGridPosition.y));
 
         return places;

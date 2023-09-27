@@ -37,42 +37,35 @@ public class UpdateShop : MonoBehaviour
         Shop.UpdateShop();
         for (int i = 0; i < GameProcess.amountOfCardInShop; i++)
         {
-
+            places = GameProcess.GetNewCardPlaces('s', GameProcess.amountOfCardInShop);
             Card currentCard = GameProcess.currentCardsInShop[i];
-            GameObject cardToShop = ReadCard(currentCard, cardPrefabCopy);
+            GameObject cardToShop = ReadCard1(currentCard);
             CardState state = cardToShop.GetComponent<CardState>();
             state.state = CardState.State.ShopCard;
             cardToShop.tag = "Shop-Card";
-            GameProcess.ShopCards.Add(cardToShop);
+            GameProcess.ShopCards.Add(Instantiate(cardToShop, places[i], cardToShop.transform.rotation));
         }
-        for(int i = 0; i < GameProcess.ShopCards.Count; i++)
+        /*for(int i = 0; i < GameProcess.ShopCards.Count; i++)
         {
-            places = GameProcess.GetNewCardPlaces('s');
+            places = GameProcess.GetNewCardPlaces('s', GameProcess.ShopCards.Count);
             GameProcess.ShopCards[i] = Instantiate(GameProcess.ShopCards[i], places[i], GameProcess.ShopCards[i].transform.rotation);
-        }
+        }*/
 
     }
-    public GameObject ReadCard(Card card, GameObject cardPrefabCopy)
+    
+    public GameObject ReadCard1(Card card)
     {
-        if (cardPrefabCopy == null)
-        {
-            print("CardPrefabCopy");
-        }
 
-        cardName = cardPrefabCopy.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardDescription = cardPrefabCopy.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardAttack = cardPrefabCopy.transform.GetChild(3).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardHealth = cardPrefabCopy.transform.GetChild(5).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardLevel = cardPrefabCopy.transform.GetChild(4).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardImage = cardPrefabCopy.transform.GetChild(1).GetComponent<Image>();
+        cardAttack = cardPrefabCopy.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
+        cardHealth = cardPrefabCopy.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
+        cardLevel = cardPrefabCopy.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
+        cardImage = cardPrefabCopy.transform.GetChild(0).GetChild(0).GetComponent<Image>();
+
         cardImage.sprite = card.spriteImage;
-        cardName.text = card.name;
-        cardDescription.text = card.description;
         cardAttack.text = card.attack.ToString();
         cardHealth.text = card.health.ToString();
         cardLevel.text = card.level.ToString();
-        //Instantiate(cardPrefabCopy, battleGround);
-        return cardPrefabCopy;
 
+        return cardPrefabCopy;
     }
 }
