@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class CardState : MonoBehaviour
 {
-   public State state;
-   public bool moveable = true;
-   public bool scalable = false;
-    public bool isShopCard = false;
-   public enum State{
+    [SerializeField] public State state;
+    [SerializeField] public bool moveable = true;
+    [SerializeField] public bool scalable = false;
+    [SerializeField] public bool isShopCard = false;
+    [SerializeField] public Card card;
+    
+    public enum State{
         ShopCard,
         HandCard,
         BattleGroundCard,
+        EnemyCard,
+        CharacterCard,
         None,
-   }
+    }
+  
 }

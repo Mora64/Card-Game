@@ -30,13 +30,18 @@ public class DisplayCards : MonoBehaviour
                 //Displaying card in shop
                 for (int i = 0; i < GameProcess.amountOfCardInShop; i++)
                 {
+
                     Card currentCard = GameProcess.currentCardsInShop[i];
                     GameObject cardToShop = ReadCard1(currentCard);    
-                    CardState state = cardToShop.GetComponent<CardState>();
-                    state.state = CardState.State.ShopCard;
-                    cardToShop.tag = "Shop-Card";
-                    GameProcess.ShopCards.Add(Instantiate(cardToShop, places[i], cardToShop.transform.rotation));
+                   
 
+                    cardToShop.tag = "Shop-Card";
+                    
+                    GameProcess.ShopCards.Add(Instantiate(cardToShop, places[i], cardToShop.transform.rotation));
+                    CardState state = GameProcess.ShopCards[i].GetComponent<CardState>();
+                    state.state = CardState.State.ShopCard;
+                    state.card = new Card(currentCard);
+                    
                 }
 
 
@@ -47,20 +52,18 @@ public class DisplayCards : MonoBehaviour
                 {
                     Card currentCard = Character.Cards[i];
                     GameObject cardOfCharacter = ReadCard1(currentCard);
-                    CardState state = cardOfCharacter.GetComponent<CardState>();
+                    
+                   
+                    cardOfCharacter.tag = "Hand-Card";
+                    GameProcess.HandCards.Add(Instantiate(cardOfCharacter, places[i], cardOfCharacter.transform.rotation));
+                    CardState state = GameProcess.HandCards[i].GetComponent<CardState>();
+
                     state.state = CardState.State.HandCard;
+                    state.card = new Card(currentCard);
                     state.moveable = true;
                     state.scalable = true;
-                    cardOfCharacter.tag = "Hand-Card";
-
-                    GameProcess.HandCards.Add(Instantiate(cardOfCharacter, places[i], cardOfCharacter.transform.rotation));
                 }
               
-              /*  for (int i = 0; i < GameProcess.HandCards.Count; i++)
-                {
-                    places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
-                    GameProcess.HandCards[i] = Instantiate(GameProcess.HandCards[i], places[i], GameProcess.HandCards[i].transform.rotation);
-                }*/
                     
                 break;
             case "Play":

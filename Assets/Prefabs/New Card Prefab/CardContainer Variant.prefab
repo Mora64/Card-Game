@@ -183,6 +183,7 @@ MonoBehaviour:
   state: 1
   moveable: 1
   scalable: 1
+  isShopCard: 0
 --- !u!61 &3210238187410239926
 BoxCollider2D:
   m_ObjectHideFlags: 0

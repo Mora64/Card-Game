@@ -10,11 +10,11 @@ public class Card
     public int health;
     public int idOfAbility;
     public int level;
-    CardSpeciallAbility[] cardSpeciallAbilities;
+    public int costOfSelling = 1;
+    public List<CardSpeciallAbility> cardSpeciallAbilities;
     public Sprite spriteImage;
-    public State state;
 
-    public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, CardSpeciallAbility[] _cardSpeciallAbilities, Sprite _sprite)
+    public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, List<CardSpeciallAbility> _cardSpeciallAbilities, Sprite _sprite)
     {
         name = _name;
         description = _description;
@@ -25,21 +25,39 @@ public class Card
         cardSpeciallAbilities = _cardSpeciallAbilities;
         spriteImage = _sprite;
     }
+    public Card(Card card)
+    {
+        this.name = card.name;
+        this.description = card.description;    
+        this.attack = card.attack;
+        health = card.health;
+        level = card.level;
+        idOfAbility = card.idOfAbility;
+        spriteImage = card.spriteImage;
+        cardSpeciallAbilities = card.cardSpeciallAbilities;
+    }
+    public Card()
+    {
+        name = null;
+        description = null;
+        attack = 0;
+        health = 0;
+        level = 0;
+        idOfAbility= 0;
+        spriteImage = null;
+        cardSpeciallAbilities = null;
 
+    }
     public enum CardSpeciallAbility
     {
         None,
         AfterDeath,
         AtTheStart,
         Provocation,
-        Schield
+        Schield,
+        BattleCry,
+        AfterSelling
     }
-    public enum State
-    {
-        ShopCard,
-        HandCard,
-        BattleGroundCard,
-        None
-    }
+    
 
 }

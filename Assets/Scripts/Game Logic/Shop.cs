@@ -14,7 +14,6 @@ public class Shop
        
         for (int i = 0; i < GameProcess.amountOfCardInShop; i++)
         {
-            Debug.Log((int)Random.Range(0, CardDataBase.cards.Count - 0.01f));
             Card randomCard = CardDataBase.cards[(int)Random.Range(0, CardDataBase.cards.Count - 0.01f)];
             cardsInShop.Add(randomCard);
         }

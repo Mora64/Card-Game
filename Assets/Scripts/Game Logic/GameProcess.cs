@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using TMPro;
 public class GameProcess : MonoBehaviour
 {
     //Music on Background
@@ -33,14 +33,16 @@ public class GameProcess : MonoBehaviour
     public static List<GameObject> ShopCards;
     public static List<GameObject> BattleGroundCards;
     public static List<GameObject> HandCards;
+    public static List<GameObject> EnemyCards;
 
-    
+    public List<Card> a;
 
     public static int amountOfCardsInShop;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        
 
         _audioSource = GetComponent<AudioSource>();
 
@@ -48,7 +50,10 @@ public class GameProcess : MonoBehaviour
         ShopCards = new List<GameObject>();
         BattleGroundCards = new List<GameObject>();
         HandCards = new List<GameObject>();
-         
+        EnemyCards = new List<GameObject> ();
+        a = new List<Card>();
+
+
         //Music
         slider.value = 0.5f;
         _currentVolume = slider.normalizedValue;
@@ -119,6 +124,27 @@ public class GameProcess : MonoBehaviour
                 return Vector2.zero;
         }
     }
+    public static void UpdateCard(GameObject obj, Card card)
+    {
+        Image _cardImage;
+        TextMeshProUGUI _cardName;
+        TextMeshProUGUI _cardDescription;
+        TextMeshProUGUI _cardAttack;
+        TextMeshProUGUI _cardHealth;
+        TextMeshProUGUI _cardLevel;
+
+        _cardAttack = obj.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
+        _cardHealth = obj.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
+        _cardLevel = obj.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
+     
+        _cardAttack.text = card.attack.ToString();
+        _cardHealth.text = card.health.ToString();
+        _cardLevel.text = card.level.ToString();
+        _cardAttack.color = Color.green;
+        _cardHealth.color = Color.green;
+        _cardLevel.color = Color.green;
+    }
+    
 }
 
 

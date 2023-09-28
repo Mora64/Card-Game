@@ -25,6 +25,7 @@ TagManager:
   - Shop-Card
   - Battleground-Card
   - Hand-Card
+  - GameProcess
   layers:
   - Default
   - TransparentFX

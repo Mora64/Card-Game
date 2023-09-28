@@ -795,7 +795,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a282e5d482fcc4b5994012076f031e64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyText: {fileID: 917382683}
 --- !u!4 &950771210
 Transform:
   m_ObjectHideFlags: 0
@@ -1228,12 +1227,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1837302158}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b6b0a65f0a8db4e4cbce262a6c922393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeRemaining: 20
+  timeRemaining: 3
   timerIsRunning: 0
   timeText: {fileID: 545245026}
 --- !u!1001 &1967466885
@@ -1381,9 +1380,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 8027583509895369278, guid: 552a60e96231b4648af1069a9df813ed, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1967466890}
-    - targetCorrespondingSourceObject: {fileID: 8027583509895369278, guid: 552a60e96231b4648af1069a9df813ed, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1967466891}
   m_SourcePrefab: {fileID: 100100000, guid: 552a60e96231b4648af1069a9df813ed, type: 3}
 --- !u!224 &1967466886 stripped
 RectTransform:
@@ -1439,18 +1435,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterCardPlaces: {fileID: 0}
   hand: {fileID: 0}
---- !u!114 &1967466891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1967466887}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30cd8cded9a2b4930bcad09036d0c465, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2928832549462387022
 Transform:
   m_ObjectHideFlags: 0

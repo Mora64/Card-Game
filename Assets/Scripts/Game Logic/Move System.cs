@@ -14,13 +14,11 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Vector3 startCardPos;
     private bool isScaled = false;
     private CardHandler cardHandler;
-    private float maxY;
-    private float minY;
+    private Vector2 minMaxY;
     private void Start()
     {
         startCardPos = transform.position;
-        cardHandler = GameObject.FindGameObjectWithTag("BattleGroundShop").GetComponent<CardHandler>();
-        GetCorners();
+        cardHandler = GameObject.FindGameObjectWithTag("GameProcess").GetComponent<CardHandler>();
     }
     void Update()
     {
@@ -29,19 +27,11 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             mousePos = Input.mousePosition;
             mousePos = Camera.main.ScreenToWorldPoint(mousePos);
             gameObject.transform.position = new Vector2(mousePos.x, mousePos.y);
-            if(transform.position.y > maxY|| transform.position.y < minY)
-                if (GetComponent<CardState>().state != CardState.State.None) cardHandler.Remove(transform);
-          /*  cardHandler.CheckPlace();*/
+            
         }
 
     }
-    private void GetCorners()
-    {
-        BoxCollider2D boxCollider2D = this.GetComponent<BoxCollider2D>();
-        maxY = boxCollider2D.bounds.max.y;
-        minY = boxCollider2D.bounds.min.y;
 
-    }
     public void OnPointerExit(PointerEventData eventData)
     {
         cardHandler.CardUnscale();
@@ -51,7 +41,7 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if (this.GetComponent<CardState>().state == CardState.State.HandCard)
         {
-            cardHandler.CardScale(this.transform);
+            cardHandler.CardScale(this.gameObject);
         }
         
     }
@@ -62,8 +52,9 @@ public void OnPointerUp(PointerEventData eventData)
         if(GetComponent<CardState>().moveable == true)
         {
             isBeingHeld = false;
-            cardHandler.CardMove(this.transform, startCardPos);
+            cardHandler.Insert(this.transform, startCardPos);
         }
+      
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -76,5 +67,6 @@ public void OnPointerUp(PointerEventData eventData)
             }
         }
         cardHandler.CardUnscale();  
+
     }
 }

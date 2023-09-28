@@ -6,7 +6,10 @@ public class Character : MonoBehaviour
 {
     public static int money = 3;
     public static List<Card> Cards;
-    [SerializeField] private TextMeshProUGUI moneyText;
+    public static int defaultUpdateShopCost = 1;
+    public static int updateShopCost = 1;
+    public static int amountOfSpeciallUpdateShopCost = 0;
+/*    [SerializeField] private TextMeshProUGUI moneyText;*/
     public static int Money
     {
         get {
@@ -17,7 +20,7 @@ public class Character : MonoBehaviour
     private void Awake() 
     {
         DontDestroyOnLoad(this);
-        moneyText.text = money.ToString();
+       /* moneyText.text = money.ToString();*/
         Cards = new List<Card>
         {
             CardDataBase.cards[0],
@@ -26,8 +29,8 @@ public class Character : MonoBehaviour
         };
         
     }
-    private void Update()
+    /*private void Update()
     {
         moneyText.text = money.ToString();
-    }
+    }*/
 }

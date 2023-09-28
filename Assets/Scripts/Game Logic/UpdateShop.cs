@@ -27,30 +27,34 @@ public class UpdateShop : MonoBehaviour
 
     public void ShopUpdate()
     {
-        Character.money--;
-        print("update shop");
-        GameProcess.ShopCards.Clear();
-        foreach(GameObject obj in GameObject.FindGameObjectsWithTag("Shop-Card"))
+        
+        if(Character.amountOfSpeciallUpdateShopCost != 0)
         {
-            Destroy(obj.gameObject);
+            Character.money -= Character.updateShopCost;
+            Character.amountOfSpeciallUpdateShopCost--;
         }
+        else Character.money -= Character.defaultUpdateShopCost;
+   
+        for(int i = 0; i < GameProcess.ShopCards.Count; i++)
+        {
+            
+            Destroy(GameProcess.ShopCards[i].gameObject);
+        }
+        GameProcess.ShopCards.Clear();
+        print("Count +" + GameProcess.ShopCards.Count);
         Shop.UpdateShop();
         for (int i = 0; i < GameProcess.amountOfCardInShop; i++)
         {
             places = GameProcess.GetNewCardPlaces('s', GameProcess.amountOfCardInShop);
             Card currentCard = GameProcess.currentCardsInShop[i];
             GameObject cardToShop = ReadCard1(currentCard);
-            CardState state = cardToShop.GetComponent<CardState>();
-            state.state = CardState.State.ShopCard;
+            
             cardToShop.tag = "Shop-Card";
             GameProcess.ShopCards.Add(Instantiate(cardToShop, places[i], cardToShop.transform.rotation));
+            CardState state = GameProcess.ShopCards[i].GetComponent<CardState>();
+            state.state = CardState.State.ShopCard;
+            state.card = currentCard;
         }
-        /*for(int i = 0; i < GameProcess.ShopCards.Count; i++)
-        {
-            places = GameProcess.GetNewCardPlaces('s', GameProcess.ShopCards.Count);
-            GameProcess.ShopCards[i] = Instantiate(GameProcess.ShopCards[i], places[i], GameProcess.ShopCards[i].transform.rotation);
-        }*/
-
     }
     
     public GameObject ReadCard1(Card card)

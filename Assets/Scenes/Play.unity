@@ -328,6 +328,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 994756168}
+  - component: {fileID: 994756169}
   m_Layer: 0
   m_Name: Battle
   m_TagString: Untagged
@@ -350,6 +351,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &994756169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 994756167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e79176f1564619142831c79c04b07268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cardPrefabCopy: {fileID: 8931423824101212586, guid: 46398df8a012f62489b4ff7ed30079d5, type: 3}
 --- !u!1 &1239095548
 GameObject:
   m_ObjectHideFlags: 0

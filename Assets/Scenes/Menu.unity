@@ -3364,9 +3364,10 @@ GameObject:
   - component: {fileID: 1612861619}
   - component: {fileID: 1612861618}
   - component: {fileID: 1612861617}
+  - component: {fileID: 1612861621}
   m_Layer: 0
   m_Name: GameProcess
-  m_TagString: Untagged
+  m_TagString: GameProcess
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3503,6 +3504,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1612861621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612861616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30cd8cded9a2b4930bcad09036d0c465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullCardPrefab: {fileID: 1464865728498300728, guid: a5cd2d2300652de4ebf99854a70aedc4, type: 3}
 --- !u!1 &1702554972
 GameObject:
   m_ObjectHideFlags: 0
