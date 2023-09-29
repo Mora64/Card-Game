@@ -8,27 +8,28 @@ public class Battle : MonoBehaviour
 {
     private List<Vector2> places;
     public GameObject _cardPrefabCopy;
-    List<GameObject> CharacterBattleCards = new List<GameObject>(GameProcess.HandCards);
-    List<GameObject> EnemyBattleCards = new List<GameObject>(GameProcess.EnemyCards);
+    List<GameObject> CharacterBattleCards;
+    List<GameObject> EnemyBattleCards;
     
     int whoAttacking;
     int indexOfRandomEnemyCard;
     int indexOfRandomCharacterCard;
     void Start()
     {
-        print("count1 +" + EnemyBattleCards.Count);
+        
+        EnemyBattleCards = new List<GameObject>();
+        CharacterBattleCards = new List<GameObject>();
         GenerateCardsInBattle();
         whoAttacking = (int)Random.Range(0f, 1.999f);
         indexOfRandomCharacterCard = (int)Random.Range(0, CharacterBattleCards.Count - 0.1f);
         indexOfRandomEnemyCard = (int)Random.Range(0, EnemyBattleCards.Count - 0.1f);
-
+        
     }
        
     private void GenerateCardsInBattle()
     {
        
         places = GameProcess.GetNewCardPlaces('s', Enemy.Cards.Count);
-        print("Coun2t " + places.Count);
         for (int i = 0; i < Enemy.Cards.Count; i++)
         {
             Card currentCard = Enemy.Cards[i];
@@ -39,10 +40,12 @@ public class Battle : MonoBehaviour
             state.state = CardState.State.EnemyCard;
             state.card = new Card(currentCard);
         }
-        for(int i = 0; i < GameProcess.HandCards.Count; i++)
+        places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
+        for (int i = 0; i < GameProcess.HandCards.Count; i++)
         {
-            EnemyBattleCards.Add(Instantiate(GameProcess.HandCards[i], places[i], GameProcess.HandCards[i].transform.rotation));
-            CardState state = EnemyBattleCards[i].GetComponent<CardState>();
+            GameProcess.HandCards[i].SetActive(true);
+            CharacterBattleCards.Add(Instantiate(GameProcess.HandCards[i], places[i], GameProcess.HandCards[i].transform.rotation));
+            CardState state = CharacterBattleCards[i].GetComponent<CardState>();
             state.state = CardState.State.CharacterCard;
             
         }

@@ -144,7 +144,22 @@ public class GameProcess : MonoBehaviour
         _cardHealth.color = Color.green;
         _cardLevel.color = Color.green;
     }
-    
+    public static void SaveCardsBetweenScenes()
+    {
+        foreach (GameObject obj in HandCards) {
+            DontDestroyOnLoad(obj);
+            obj.SetActive(false);
+        }
+        foreach (GameObject obj in ShopCards) {
+            DontDestroyOnLoad(obj);
+            obj.SetActive(false);
+        }
+        foreach (GameObject obj in BattleGroundCards) {
+            DontDestroyOnLoad(obj);
+            obj.SetActive(false);
+        }
+    }
+
 }
 
 

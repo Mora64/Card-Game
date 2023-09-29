@@ -26,6 +26,7 @@ public class Timer : MonoBehaviour
             }
             else
             {
+                GameProcess.SaveCardsBetweenScenes();
                 GameProcess.goToFightScene();
                 timerIsRunning = false;
             }

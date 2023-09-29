@@ -111,11 +111,7 @@ public class CardHandler : MonoBehaviour
     }
     public  void CardScale(GameObject card)
     {
-
-        
         scaledCard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x + 3, card.transform.position.y), card.transform.rotation).transform;
-        /*scaledCard = Instantiate(GameProcess.MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card).transform, new Vector2(card.transform.position.x+3, card.transform.position.y), card.transform.rotation);*/
-
     }
    
     public  void CardUnscale()

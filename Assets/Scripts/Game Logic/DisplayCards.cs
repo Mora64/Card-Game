@@ -17,7 +17,7 @@ public class DisplayCards : MonoBehaviour
     private TextMeshProUGUI _cardHealth;
     private TextMeshProUGUI _cardLevel;
     private List<Vector2> places;
-    void Awake()
+    void Start()
     {
         _cardPrefabCopy = _cardPrefab;
         List<GameObject> cardstepm = new List<GameObject>();
@@ -32,16 +32,16 @@ public class DisplayCards : MonoBehaviour
                 {
 
                     Card currentCard = GameProcess.currentCardsInShop[i];
-                    GameObject cardToShop = ReadCard1(currentCard);    
-                   
+                    GameObject cardToShop = ReadCard1(currentCard);
+
 
                     cardToShop.tag = "Shop-Card";
-                    
+
                     GameProcess.ShopCards.Add(Instantiate(cardToShop, places[i], cardToShop.transform.rotation));
                     CardState state = GameProcess.ShopCards[i].GetComponent<CardState>();
                     state.state = CardState.State.ShopCard;
                     state.card = new Card(currentCard);
-                    
+
                 }
 
 
@@ -52,8 +52,8 @@ public class DisplayCards : MonoBehaviour
                 {
                     Card currentCard = Character.Cards[i];
                     GameObject cardOfCharacter = ReadCard1(currentCard);
-                    
-                   
+
+
                     cardOfCharacter.tag = "Hand-Card";
                     GameProcess.HandCards.Add(Instantiate(cardOfCharacter, places[i], cardOfCharacter.transform.rotation));
                     CardState state = GameProcess.HandCards[i].GetComponent<CardState>();
@@ -63,43 +63,43 @@ public class DisplayCards : MonoBehaviour
                     state.moveable = true;
                     state.scalable = true;
                 }
-              
-                    
+
+
                 break;
             case "Play":
-       
+
             default:
                 print("Something went wrong in DisplayCards.cs/switch");
                 break;
         }
-      
+
     }
-    
-    
- /*   public GameObject ReadCard(Card card)
-    {
-        *//*if (cardPrefabCopy == null)
-        {
-            print("CardPrefabCopy");
-        }*//*
-        
-        _cardName = _cardPrefabCopy.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        
-        _cardDescription = _cardPrefabCopy.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
-        _cardAttack = _cardPrefabCopy.transform.GetChild(3).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        _cardHealth = _cardPrefabCopy.transform.GetChild(5).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        _cardLevel = _cardPrefabCopy.transform.GetChild(4).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
-        _cardImage = _cardPrefabCopy.transform.GetChild(1).GetComponent<Image>();
-        
-        _cardImage.sprite = card.spriteImage;
-        _cardName.text = card.name;
-        _cardDescription.text = card.description;
-        _cardAttack.text = card.attack.ToString();
-        _cardHealth.text = card.health.ToString();
-        _cardLevel.text = card.level.ToString();
-      
-        return _cardPrefabCopy;
-    }*/
+
+
+    /*   public GameObject ReadCard(Card card)
+       {
+           *//*if (cardPrefabCopy == null)
+           {
+               print("CardPrefabCopy");
+           }*//*
+
+           _cardName = _cardPrefabCopy.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+
+           _cardDescription = _cardPrefabCopy.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
+           _cardAttack = _cardPrefabCopy.transform.GetChild(3).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+           _cardHealth = _cardPrefabCopy.transform.GetChild(5).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+           _cardLevel = _cardPrefabCopy.transform.GetChild(4).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
+           _cardImage = _cardPrefabCopy.transform.GetChild(1).GetComponent<Image>();
+
+           _cardImage.sprite = card.spriteImage;
+           _cardName.text = card.name;
+           _cardDescription.text = card.description;
+           _cardAttack.text = card.attack.ToString();
+           _cardHealth.text = card.health.ToString();
+           _cardLevel.text = card.level.ToString();
+
+           return _cardPrefabCopy;
+       }*/
     public GameObject ReadCard1(Card card)
     {
 
@@ -115,4 +115,5 @@ public class DisplayCards : MonoBehaviour
 
         return _cardPrefabCopy;
     }
+    
 }
