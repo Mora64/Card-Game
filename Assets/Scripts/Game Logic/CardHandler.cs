@@ -13,6 +13,8 @@ public class CardHandler : MonoBehaviour
     private Transform currentCard;
     private Transform scaledCard;
     public GameObject fullCardPrefab;
+    [SerializeField] private GameObject _cardPrefab;
+
     public void Insert(Transform card, Vector3 startCardPos)
     {
 
@@ -22,16 +24,26 @@ public class CardHandler : MonoBehaviour
 
                 if (card.position.y < GameProcess.HandZone)
                 {
-                    card.GetComponent<CardState>().state = CardState.State.HandCard;
-                    GameProcess.HandCards.Add(card.gameObject);   
+                    GameObject fullcard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x, card.transform.position.y), card.transform.rotation);
+                    fullcard.transform.localScale *= 0.5f;
+
+                    fullcard.GetComponent<CardState>().card = card.GetComponent<CardState>().card;
+                    fullcard.GetComponent<CardState>().state = CardState.State.HandCard;
+
+                    GameProcess.HandCards.Add(fullcard.gameObject);
                     GameProcess.ShopCards.Remove(card.gameObject);
+
+                    Destroy(card.gameObject);
+         
                     //Shifting Hand-Cards
                     List<Vector2>places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
                     StartCoroutine(Move('h', places));
+
                     //Shifting Shop-Cards
                     places = GameProcess.GetNewCardPlaces('s', GameProcess.ShopCards.Count);
                     StartCoroutine(Move('s', places));
 
+                    Character.money -= Character.buyingCardCost;
                 }
                 else ReturnToStartPosition(card, startCardPos);
                 break;
@@ -40,22 +52,36 @@ public class CardHandler : MonoBehaviour
                 //if we are selling the card
                 if (card.position.y > GameProcess.ShopZone)
                 {
-                    if (card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.AfterSelling))
-                    {
-                        CardAbility.UseCardAbility(card.GetComponent<CardState>().card.idOfAbility, card.gameObject);
-                    }
                     GameProcess.HandCards.Remove(card.gameObject);
+                    //Shifting Hand-Cards
+                    List<Vector2> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
+                    StartCoroutine(Move('h', places));
+
+                    if (card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.AfterSelling))
+                        CardAbility.UseCardAbility(card.GetComponent<CardState>().card.idOfAbility, card.gameObject);
+
                     Character.money+= card.GetComponent<CardState>().card.costOfSelling;
                     Destroy(card.gameObject);
                 }
                 //if we are putting card on table
                 else if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
                 {
+                    
+                
+                    GameObject smallCard = MakeSmallCard(_cardPrefab, card.GetComponent<CardState>().card);
+
                     GameProcess.HandCards.Remove(card.gameObject);
-                    GameProcess.BattleGroundCards.Add(card.gameObject);
+                    
+                    GameObject temp = Instantiate(smallCard, new Vector2(card.transform.position.x, card.transform.position.y), smallCard.transform.rotation);
+
+                    temp.GetComponent<CardState>().card = card.GetComponent<CardState>().card;
+                    temp.GetComponent<CardState>().state = CardState.State.BattleGroundCard;
+
+                    GameProcess.BattleGroundCards.Add(temp);
                     GameProcess.BattleGroundCards.Sort((x, y) => x.transform.position.x.CompareTo(y.transform.position.x));
 
-                    card.GetComponent<CardState>().state = CardState.State.BattleGroundCard;
+                    Destroy(card.gameObject);
+
                     //Shifting BattleGround-Cards
                     List<Vector2> places = GameProcess.GetNewCardPlaces('b', GameProcess.BattleGroundCards.Count);
                     StartCoroutine(Move('b', places));
@@ -65,11 +91,10 @@ public class CardHandler : MonoBehaviour
                     StartCoroutine(Move('h', places));
 
                     //if card has BattleCry Abillity, using it
-                    if(card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.BattleCry)){
+                    if(card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.BattleCry))
                         CardAbility.UseCardAbility(card.GetComponent<CardState>().card.idOfAbility, card.gameObject);
-                    }
-                }
 
+                }
                 else
                 {
                     List<Vector2> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
@@ -80,16 +105,18 @@ public class CardHandler : MonoBehaviour
             case CardState.State.BattleGroundCard:
                 if (card.position.y > GameProcess.ShopZone)
                 {
-                    if (card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.AfterSelling))
-                    {
-                        CardAbility.UseCardAbility(card.GetComponent<CardState>().card.idOfAbility, card.gameObject);
-                    }
                     GameProcess.BattleGroundCards.Remove(card.gameObject);
-                    print("COST " + card.GetComponent<CardState>().card.costOfSelling);
+
+                    //Shifting Hand-Cards
+                    List<Vector2> places = GameProcess.GetNewCardPlaces('b', GameProcess.HandCards.Count);
+                    StartCoroutine(Move('b', places));
+
+                    if (card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.AfterSelling))
+                        CardAbility.UseCardAbility(card.GetComponent<CardState>().card.idOfAbility, card.gameObject);
+
                     Character.money += card.GetComponent<CardState>().card.costOfSelling;
 
                     Destroy(card.gameObject);
-              
                 }
 
                 else if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone) StartCoroutine(Shifting());
@@ -98,7 +125,6 @@ public class CardHandler : MonoBehaviour
                 break;
         }
     }
-
     public GameObject MakeFullCard(GameObject obj,Card card)
     {
         obj.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
@@ -109,11 +135,19 @@ public class CardHandler : MonoBehaviour
         obj.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = card.spriteImage;
         return obj;
     }
+    public static GameObject MakeSmallCard(GameObject _cardPrefab, Card card)
+    {
+         _cardPrefab.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
+        _cardPrefab.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.health.ToString();
+        _cardPrefab.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.level.ToString();
+        _cardPrefab.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = card.spriteImage;
+        return _cardPrefab;
+    }
     public  void CardScale(GameObject card)
     {
-        scaledCard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x + 3, card.transform.position.y), card.transform.rotation).transform;
+        if(card.GetComponent<CardState>().state != CardState.State.HandCard)
+            scaledCard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x + 3, card.transform.position.y), card.transform.rotation).transform;
     }
-   
     public  void CardUnscale()
     {
         if (scaledCard != null)

@@ -15,6 +15,7 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private bool isScaled = false;
     private CardHandler cardHandler;
     private Vector2 minMaxY;
+    private float timer = 0;
     private void Start()
     {
         startCardPos = transform.position;
@@ -39,7 +40,7 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (this.GetComponent<CardState>().state == CardState.State.HandCard)
+        if (this.GetComponent<CardState>().state != CardState.State.HandCard)
         {
             cardHandler.CardScale(this.gameObject);
         }
@@ -58,14 +59,19 @@ public void OnPointerUp(PointerEventData eventData)
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if(GetComponent<CardState>().moveable == true)
+        if(this.GetComponent<CardState>().moveable == true)
         {
-            startCardPos = transform.position;
-            if (Input.GetMouseButton(0))
+            if (GetComponent<CardState>().moveable == true)
             {
-                isBeingHeld = true;
+                startCardPos = transform.position;
+                if (Input.GetMouseButton(0))
+                {
+                    isBeingHeld = true;
+                }
             }
+
         }
+        
         cardHandler.CardUnscale();  
 
     }

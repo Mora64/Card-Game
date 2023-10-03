@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class Battle : MonoBehaviour
 {
     private List<Vector2> places;
@@ -12,8 +12,12 @@ public class Battle : MonoBehaviour
     List<GameObject> EnemyBattleCards;
     
     int whoAttacking;
-    int indexOfRandomEnemyCard;
-    int indexOfRandomCharacterCard;
+    int RandomEnemyCard;
+    int RandomCharacterCard;
+    int CurrentCharacterCard = 0;
+    int CurrentEnemyCard = 0;
+    bool goToShopScene = false;
+    Vector3 startCardPos;
     void Start()
     {
         
@@ -21,11 +25,16 @@ public class Battle : MonoBehaviour
         CharacterBattleCards = new List<GameObject>();
         GenerateCardsInBattle();
         whoAttacking = (int)Random.Range(0f, 1.999f);
-        indexOfRandomCharacterCard = (int)Random.Range(0, CharacterBattleCards.Count - 0.1f);
-        indexOfRandomEnemyCard = (int)Random.Range(0, EnemyBattleCards.Count - 0.1f);
+
         
     }
-       
+    private void Update()
+    {
+        if (goToShopScene)
+        {
+            SceneManager.LoadScene("Shop");
+        }
+    }
     private void GenerateCardsInBattle()
     {
        
@@ -34,40 +43,109 @@ public class Battle : MonoBehaviour
         {
             Card currentCard = Enemy.Cards[i];
             GameObject BattleCard = ReadCard1(currentCard);
-            if (EnemyBattleCards == null) print("null1");
             EnemyBattleCards.Add(Instantiate(BattleCard, places[i], BattleCard.transform.rotation));
             CardState state = EnemyBattleCards[i].GetComponent<CardState>();
             state.state = CardState.State.EnemyCard;
             state.card = new Card(currentCard);
+            state.moveable = false;
         }
-        places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
-        for (int i = 0; i < GameProcess.HandCards.Count; i++)
+
+        places = GameProcess.GetNewCardPlaces('h', GameProcess.BattleGroundCards.Count);
+        for (int i = 0; i < GameProcess.BattleGroundCards.Count; i++)
         {
-            GameProcess.HandCards[i].SetActive(true);
-            CharacterBattleCards.Add(Instantiate(GameProcess.HandCards[i], places[i], GameProcess.HandCards[i].transform.rotation));
+            GameProcess.BattleGroundCards[i].SetActive(true);
+            CharacterBattleCards.Add(Instantiate(GameProcess.BattleGroundCards[i], places[i], GameProcess.BattleGroundCards[i].transform.rotation));
+            GameProcess.BattleGroundCards[i].SetActive(false);
             CardState state = CharacterBattleCards[i].GetComponent<CardState>();
             state.state = CardState.State.CharacterCard;
-            
+            state.card = GameProcess.BattleGroundCards[i].GetComponent<CardState>().card;
+            state.moveable = false;
         }
+
+        StartCoroutine(BattleProcess());
     }
     IEnumerator BattleProcess()
     {
-        if(whoAttacking == 0)
+        List<GameObject> attacker = new List<GameObject>();
+        List<GameObject> defender = new List<GameObject>();
+        int CurrentCard;
+        int RandomCard;
+        bool isAtackingCharacter = false;
+
+        while(EnemyBattleCards.Count != 0 || CharacterBattleCards.Count != 0)
         {
-            while(Vector2.Distance(CharacterBattleCards[indexOfRandomCharacterCard].transform.position, EnemyBattleCards[indexOfRandomEnemyCard].transform.position) != 0)
+            //Calculating who will atacking first and who will defence
+            if (whoAttacking == 1)
             {
-                CharacterBattleCards[indexOfRandomCharacterCard].transform.position = Vector2.MoveTowards(CharacterBattleCards[indexOfRandomCharacterCard].transform.position, EnemyBattleCards[indexOfRandomEnemyCard].transform.position, 0.02f);
+                attacker = CharacterBattleCards;
+                isAtackingCharacter = true;
+                defender = EnemyBattleCards;
+                CurrentCard = CurrentCharacterCard;
+                RandomCard = (int)Random.Range(0, EnemyBattleCards.Count - 0.1f);
+            }
+            else
+            {
+                attacker = EnemyBattleCards;
+                isAtackingCharacter = false;
+                defender = CharacterBattleCards;
+                CurrentCard = CurrentEnemyCard;
+                RandomCard = (int)Random.Range(0, CharacterBattleCards.Count - 0.1f);
+
+            }
+
+            if (CurrentCard >= attacker.Count) CurrentCard = 0;
+            if (attacker.Count == 0) {goToShopScene = true; yield break;} 
+
+            startCardPos = attacker[CurrentCard].transform.position;
+
+            //atack card animation
+            while (Vector2.Distance(attacker[CurrentCard].transform.position, defender[RandomCard].transform.position) != 0)
+            {
+                attacker[CurrentCard].transform.position = Vector2.MoveTowards(attacker[CurrentCard].transform.position, defender[RandomCard].transform.position, 0.01f);
                 yield return null;
             }
-            EnemyBattleCards[indexOfRandomEnemyCard].GetComponent<CardState>().card.health-= CharacterBattleCards[indexOfRandomCharacterCard].GetComponent<CardState>().card.attack;
-            if (EnemyBattleCards[indexOfRandomEnemyCard].GetComponent<CardState>().card.health == 0) Destroy(EnemyBattleCards[indexOfRandomEnemyCard]);
-            CharacterBattleCards[indexOfRandomCharacterCard].GetComponent<CardState>().card.health -= EnemyBattleCards[indexOfRandomEnemyCard].GetComponent<CardState>().card.attack;
-            if (CharacterBattleCards[indexOfRandomCharacterCard].GetComponent<CardState>().card.health == 0) Destroy(CharacterBattleCards[indexOfRandomCharacterCard]);
-        }
-        if(whoAttacking == 1)
-        {
 
+            //health cards updates
+            defender[RandomCard].GetComponent<CardState>().card.health -= attacker[CurrentCard].GetComponent<CardState>().card.attack;
+            GameProcess.UpdateCard(defender[RandomCard], defender[RandomCard].GetComponent<CardState>().card, false);
+            attacker[CurrentCard].GetComponent<CardState>().card.health -= defender[RandomCard].GetComponent<CardState>().card.attack;
+            GameProcess.UpdateCard(attacker[CurrentCard], attacker[CurrentCard].GetComponent<CardState>().card,false);
+
+            //return back card animation
+            while (Vector2.Distance(attacker[CurrentCard].transform.position, startCardPos) != 0)
+            {
+                attacker[CurrentCard].transform.position = Vector2.MoveTowards(attacker[CurrentCard].transform.position, startCardPos, 0.02f);
+                yield return null;
+            }
+
+            //if health of card = 0; delete this card from scene
+            if (defender[RandomCard].GetComponent<CardState>().card.health <= 0) {
+                GameObject temp = defender[RandomCard];
+                defender.Remove(defender[RandomCard]);
+                Destroy(temp);
+            }
+
+            if (attacker[CurrentCard].GetComponent<CardState>().card.health <= 0)
+            {
+                GameObject temp = attacker[CurrentCard];
+                attacker.Remove(attacker[CurrentCard]);
+                Destroy(temp);
+            }
+
+            if(CurrentCard > attacker.Count) CurrentCard = 0;
+            if(attacker.Count == 0) {goToShopScene = true; yield break;}
+            if (defender.Count == 0){goToShopScene = true; yield break;}
+
+            //updating values
+            whoAttacking = whoAttacking == 0 ? 1 : 0;
+            if (isAtackingCharacter) CurrentCharacterCard++;
+            else CurrentEnemyCard++;
+
+            yield return null;
         }
+        goToShopScene = true;
+        yield break;
+        
     }
 
     public GameObject ReadCard1(Card card)

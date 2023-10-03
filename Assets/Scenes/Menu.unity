@@ -3517,6 +3517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fullCardPrefab: {fileID: 1464865728498300728, guid: a5cd2d2300652de4ebf99854a70aedc4, type: 3}
+  _cardPrefab: {fileID: 8931423824101212586, guid: 46398df8a012f62489b4ff7ed30079d5, type: 3}
 --- !u!1 &1702554972
 GameObject:
   m_ObjectHideFlags: 0

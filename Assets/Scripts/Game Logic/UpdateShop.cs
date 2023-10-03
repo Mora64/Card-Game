@@ -7,27 +7,27 @@ using System.Collections.Generic;
 public class UpdateShop : MonoBehaviour
 {
 
-    private Transform battleGroundShop;
+    private static Transform battleGroundShop;
     [SerializeField] GameObject cardPrefab;
-    private GameObject cardPrefabCopy;
-    private Image cardImage;
-    private TextMeshProUGUI cardName;
-    private TextMeshProUGUI cardDescription;
-    private TextMeshProUGUI cardAttack;
-    private TextMeshProUGUI cardHealth;
-    private TextMeshProUGUI cardLevel;
+    private static GameObject cardPrefabCopy;
+    private static Image cardImage;
+    private static TextMeshProUGUI cardName;
+    private static TextMeshProUGUI cardDescription;
+    private static TextMeshProUGUI cardAttack;
+    private static TextMeshProUGUI cardHealth;
+    private static TextMeshProUGUI cardLevel;
 
-    private List<Vector2> places;
+    private static List<Vector2> places;
     // Start is called before the first frame update
     void Start()
     {
         cardPrefabCopy = cardPrefab;
-
+        
     }
 
-    public void ShopUpdate()
+    public static void ShopUpdate()
     {
-        
+        print("UPDATESHOP");
         if(Character.amountOfSpeciallUpdateShopCost != 0)
         {
             Character.money -= Character.updateShopCost;
@@ -41,7 +41,6 @@ public class UpdateShop : MonoBehaviour
             Destroy(GameProcess.ShopCards[i].gameObject);
         }
         GameProcess.ShopCards.Clear();
-        print("Count +" + GameProcess.ShopCards.Count);
         Shop.UpdateShop();
         for (int i = 0; i < GameProcess.amountOfCardInShop; i++)
         {
@@ -57,7 +56,7 @@ public class UpdateShop : MonoBehaviour
         }
     }
     
-    public GameObject ReadCard1(Card card)
+    public static  GameObject ReadCard1(Card card)
     {
 
         cardAttack = cardPrefabCopy.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();

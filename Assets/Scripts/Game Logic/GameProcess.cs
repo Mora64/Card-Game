@@ -20,8 +20,10 @@ public class GameProcess : MonoBehaviour
     public static float ShopZone = 3f;
     //Card size
     private static float CARDHEIGHT = 3f;
-    private static float CARDWIDTH = 2.10f;
-    private static float SPACING = 0.84f;
+    private static float DEFAULTCARDWIDTH = 1.756f;
+    private static float HANDCARDWIDTH = 1.34f;
+    private static float DEFAULTSPACING = 0.25f;
+    private static float HANDCARDSPACING = 0f;
 
     //card grid positions;
     private static Vector2 shopGridPosition;
@@ -35,15 +37,14 @@ public class GameProcess : MonoBehaviour
     public static List<GameObject> HandCards;
     public static List<GameObject> EnemyCards;
 
-    public List<Card> a;
+    public static bool FreezeShop = false;
 
     public static int amountOfCardsInShop;
-
+    [SerializeField] private static GameObject _cardPrefab;
     private void Awake()
     {
         DontDestroyOnLoad(this);
         
-
         _audioSource = GetComponent<AudioSource>();
 
         currentCardsInShop = new List<Card>();
@@ -51,8 +52,6 @@ public class GameProcess : MonoBehaviour
         BattleGroundCards = new List<GameObject>();
         HandCards = new List<GameObject>();
         EnemyCards = new List<GameObject> ();
-        a = new List<Card>();
-
 
         //Music
         slider.value = 0.5f;
@@ -64,13 +63,11 @@ public class GameProcess : MonoBehaviour
 
         //Shop
         Shop.cardsInShop = new List<Card>();
-        Shop.UpdateShop();
-      
 
         //card grid positions;
-        shopGridPosition = new Vector2(0, 2.3f);
+        shopGridPosition = new Vector2(0, 3.5f);
         battlegroundGridPosition = new Vector2(0, -0.28f);
-        handGridPosition = new Vector2(0, -2.8f);
+        handGridPosition = new Vector2(0, -4f);
     }
     public static void goToFightScene()
     {
@@ -87,6 +84,8 @@ public class GameProcess : MonoBehaviour
         List<Vector2> places = new List<Vector2>();
         List<GameObject> currentListOfCard = new List<GameObject>();
         Vector2 currentGridPosition = Vector2.zero;
+        float spacing   = flag == 'h' ? HANDCARDSPACING : DEFAULTSPACING;
+        float cardWidth = flag == 'h' ? HANDCARDWIDTH   : DEFAULTCARDWIDTH;
 
         switch (flag)
         {
@@ -104,31 +103,29 @@ public class GameProcess : MonoBehaviour
                 break;
         }
 
-        Vector2 start = getLeftCorner(a, currentGridPosition);
-
+        Vector2 start = getLeftCorner(a, currentGridPosition, spacing, cardWidth);
+        
         for (int i = 0; i < a; i++)
-            places.Add(new Vector2(start.x + (CARDWIDTH / 2 + (i) * CARDWIDTH + SPACING * i), currentGridPosition.y));
-
+            places.Add(new Vector2(start.x + (cardWidth / 2 + (i) * (cardWidth) + spacing * i), currentGridPosition.y));
+       
         return places;
     }
-    private static Vector2 getLeftCorner(int amount, Vector2 start)
+    private static Vector2 getLeftCorner(int amount, Vector2 start, float spacing, float width)
     {
-        if (amount == 1) return new Vector2(start.x - CARDWIDTH / 2, 0);
+        
+        if (amount == 1) return new Vector2(start.x - width / 2, 0);
         switch (amount % 2)
         {
             case 1:
-                return new Vector2(start.x - ((amount / 2) * CARDWIDTH + SPACING + (CARDWIDTH / 2)), 0);           
+                return new Vector2(start.x - ((amount / 2) * width + (spacing*(amount/2)) + (width / 2)), 0);           
             case 0:
-                return new Vector2(start.x - ((amount / 2) * CARDWIDTH + (SPACING / 2) * (amount-1)), 0);
+                return new Vector2(start.x - ((amount / 2) * width + (spacing / 2) * (amount-1)), 0);
             default:
                 return Vector2.zero;
         }
     }
-    public static void UpdateCard(GameObject obj, Card card)
+    public static void UpdateCard(GameObject obj, Card card, bool decorate)
     {
-        Image _cardImage;
-        TextMeshProUGUI _cardName;
-        TextMeshProUGUI _cardDescription;
         TextMeshProUGUI _cardAttack;
         TextMeshProUGUI _cardHealth;
         TextMeshProUGUI _cardLevel;
@@ -140,9 +137,15 @@ public class GameProcess : MonoBehaviour
         _cardAttack.text = card.attack.ToString();
         _cardHealth.text = card.health.ToString();
         _cardLevel.text = card.level.ToString();
-        _cardAttack.color = Color.green;
-        _cardHealth.color = Color.green;
-        _cardLevel.color = Color.green;
+
+        if (decorate)
+        {
+            _cardAttack.color = Color.green;
+            _cardHealth.color = Color.green;
+            _cardLevel.color = Color.green;
+
+        }
+        
     }
     public static void SaveCardsBetweenScenes()
     {
@@ -150,15 +153,18 @@ public class GameProcess : MonoBehaviour
             DontDestroyOnLoad(obj);
             obj.SetActive(false);
         }
-        foreach (GameObject obj in ShopCards) {
+        /*foreach (GameObject obj in ShopCards)
+        {
             DontDestroyOnLoad(obj);
             obj.SetActive(false);
-        }
+        }*/
+        ShopCards.Clear();
         foreach (GameObject obj in BattleGroundCards) {
             DontDestroyOnLoad(obj);
             obj.SetActive(false);
         }
     }
+   
 
 }
 

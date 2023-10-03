@@ -18,7 +18,7 @@ public class CardAbility : MonoBehaviour
                     Card card = state.card;
                     card.attack++;
                     card.health++;
-                    GameProcess.UpdateCard(GameProcess.BattleGroundCards[i], card);
+                    GameProcess.UpdateCard(GameProcess.BattleGroundCards[i], card, true);
                 }
                 break;
             case 2:
@@ -31,8 +31,11 @@ public class CardAbility : MonoBehaviour
             case 4:
                 
                 int index = (int)Random.Range(0, GameProcess.BattleGroundCards.Count - 0.01f);
+                if (GameProcess.BattleGroundCards[index] == null) print(1);
+                if (GameProcess.BattleGroundCards[index].GetComponent<CardState>().card == null) print(2);
+                if (GameProcess.BattleGroundCards[index].GetComponent<CardState>().card.attack == null) print(3);
                 GameProcess.BattleGroundCards[index].GetComponent<CardState>().card.attack+=5;
-                GameProcess.UpdateCard(GameProcess.BattleGroundCards[index], GameProcess.BattleGroundCards[index].GetComponent<CardState>().card);
+                GameProcess.UpdateCard(GameProcess.BattleGroundCards[index], GameProcess.BattleGroundCards[index].GetComponent<CardState>().card, true);
 
                 break;
 
