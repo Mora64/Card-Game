@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 public class Battle : MonoBehaviour
 {
-    private List<Vector2> places;
+    private List<Vector3> places;
     public GameObject _cardPrefabCopy;
     List<GameObject> CharacterBattleCards;
     List<GameObject> EnemyBattleCards;
@@ -50,7 +50,7 @@ public class Battle : MonoBehaviour
             state.moveable = false;
         }
 
-        places = GameProcess.GetNewCardPlaces('h', GameProcess.BattleGroundCards.Count);
+        places = GameProcess.GetNewCardPlaces('c', GameProcess.BattleGroundCards.Count);
         for (int i = 0; i < GameProcess.BattleGroundCards.Count; i++)
         {
             GameProcess.BattleGroundCards[i].SetActive(true);

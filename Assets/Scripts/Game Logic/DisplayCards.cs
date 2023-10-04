@@ -16,7 +16,7 @@ public class DisplayCards : MonoBehaviour
     private TextMeshProUGUI _cardAttack;
     private TextMeshProUGUI _cardHealth;
     private TextMeshProUGUI _cardLevel;
-    private List<Vector2> places;
+    private List<Vector3> places;
     void Start()
     {
         _cardPrefabCopy = _cardPrefab;

@@ -13,6 +13,12 @@ public class CardHandler : MonoBehaviour
     private Transform currentCard;
     private Transform scaledCard;
     public GameObject fullCardPrefab;
+    public GameObject linkToUnscale;
+    private Quaternion oldRotation;
+    private float oldZPosition;
+    private Vector3 oldLocalScale;
+    public bool HoldongCard = false;
+
     [SerializeField] private GameObject _cardPrefab;
 
     public void Insert(Transform card, Vector3 startCardPos)
@@ -29,14 +35,15 @@ public class CardHandler : MonoBehaviour
 
                     fullcard.GetComponent<CardState>().card = card.GetComponent<CardState>().card;
                     fullcard.GetComponent<CardState>().state = CardState.State.HandCard;
-
+                    fullcard.GetComponent<CardState>().scalable = false;
                     GameProcess.HandCards.Add(fullcard.gameObject);
                     GameProcess.ShopCards.Remove(card.gameObject);
 
                     Destroy(card.gameObject);
-         
+                    print(fullcard.transform.rotation);
+
                     //Shifting Hand-Cards
-                    List<Vector2>places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
+                    List<Vector3> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
                     StartCoroutine(Move('h', places));
 
                     //Shifting Shop-Cards
@@ -44,6 +51,7 @@ public class CardHandler : MonoBehaviour
                     StartCoroutine(Move('s', places));
 
                     Character.money -= Character.buyingCardCost;
+
                 }
                 else ReturnToStartPosition(card, startCardPos);
                 break;
@@ -54,24 +62,24 @@ public class CardHandler : MonoBehaviour
                 {
                     GameProcess.HandCards.Remove(card.gameObject);
                     //Shifting Hand-Cards
-                    List<Vector2> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
+                    List<Vector3> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
                     StartCoroutine(Move('h', places));
 
                     if (card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.AfterSelling))
                         CardAbility.UseCardAbility(card.GetComponent<CardState>().card.idOfAbility, card.gameObject);
 
-                    Character.money+= card.GetComponent<CardState>().card.costOfSelling;
+                    Character.money += card.GetComponent<CardState>().card.costOfSelling;
                     Destroy(card.gameObject);
                 }
                 //if we are putting card on table
                 else if (card.position.y > GameProcess.HandZone && card.position.y < GameProcess.ShopZone)
                 {
-                    
-                
+
+
                     GameObject smallCard = MakeSmallCard(_cardPrefab, card.GetComponent<CardState>().card);
 
                     GameProcess.HandCards.Remove(card.gameObject);
-                    
+
                     GameObject temp = Instantiate(smallCard, new Vector2(card.transform.position.x, card.transform.position.y), smallCard.transform.rotation);
 
                     temp.GetComponent<CardState>().card = card.GetComponent<CardState>().card;
@@ -83,7 +91,7 @@ public class CardHandler : MonoBehaviour
                     Destroy(card.gameObject);
 
                     //Shifting BattleGround-Cards
-                    List<Vector2> places = GameProcess.GetNewCardPlaces('b', GameProcess.BattleGroundCards.Count);
+                    List<Vector3> places = GameProcess.GetNewCardPlaces('b', GameProcess.BattleGroundCards.Count);
                     StartCoroutine(Move('b', places));
 
                     //Shifting Hand-Cards
@@ -91,13 +99,13 @@ public class CardHandler : MonoBehaviour
                     StartCoroutine(Move('h', places));
 
                     //if card has BattleCry Abillity, using it
-                    if(card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.BattleCry))
+                    if (card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.BattleCry))
                         CardAbility.UseCardAbility(card.GetComponent<CardState>().card.idOfAbility, card.gameObject);
 
                 }
                 else
                 {
-                    List<Vector2> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
+                    List<Vector3> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
                     ReturnToStartPosition(card, startCardPos);
                 }
                 break;
@@ -108,7 +116,7 @@ public class CardHandler : MonoBehaviour
                     GameProcess.BattleGroundCards.Remove(card.gameObject);
 
                     //Shifting Hand-Cards
-                    List<Vector2> places = GameProcess.GetNewCardPlaces('b', GameProcess.HandCards.Count);
+                    List<Vector3> places = GameProcess.GetNewCardPlaces('b', GameProcess.HandCards.Count);
                     StartCoroutine(Move('b', places));
 
                     if (card.GetComponent<CardState>().card.cardSpeciallAbilities.Contains(Card.CardSpeciallAbility.AfterSelling))
@@ -125,7 +133,7 @@ public class CardHandler : MonoBehaviour
                 break;
         }
     }
-    public GameObject MakeFullCard(GameObject obj,Card card)
+    public GameObject MakeFullCard(GameObject obj, Card card)
     {
         obj.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
         obj.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.health.ToString();
@@ -137,28 +145,77 @@ public class CardHandler : MonoBehaviour
     }
     public static GameObject MakeSmallCard(GameObject _cardPrefab, Card card)
     {
-         _cardPrefab.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
+        _cardPrefab.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
         _cardPrefab.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.health.ToString();
         _cardPrefab.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.level.ToString();
         _cardPrefab.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = card.spriteImage;
         return _cardPrefab;
     }
-    public  void CardScale(GameObject card)
+    public void CardScale(GameObject card)
     {
-        if(card.GetComponent<CardState>().state != CardState.State.HandCard)
-            scaledCard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x + 3, card.transform.position.y), card.transform.rotation).transform;
+        if (!HoldongCard)
+        {
+            if (card.GetComponent<CardState>().scalable)
+            {
+                if (card.GetComponent<CardState>().state != CardState.State.HandCard)
+                {
+                    /* GameObject obj = MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card);
+                     oldLocalScale = obj.transform.localScale;
+                     obj.transform.localScale /= 4;*/
+                    scaledCard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x + 3, card.transform.position.y), card.transform.rotation).transform;
+
+                }
+
+                else
+                {
+                    /*BoxCollider2D boxCollider = card.GetComponent<BoxCollider2D>();
+                    oldZPosition = card.transform.position.z;
+                    card.transform.position = new Vector3(card.transform.position.x, card.transform.position.y + 2f, -7);
+                    card.transform.localScale *= 2.5f;
+                    linkToUnscale = card;
+                    oldRotation = card.transform.rotation;
+                    Quaternion rot1 = new Quaternion();
+                    rot1.eulerAngles = new Vector3(0, 0, 0);
+                    card.transform.rotation = rot1;*/
+                }
+            }
+
+        }
+
+
     }
-    public  void CardUnscale()
+    /*    private IEnumerator SmoothScaling(Transform t, Vector3 v)
+        {
+
+            while (t.localScale != v)
+            {
+                t.localScale = Vector3.Lerp(t.localScale, v, Time.deltaTime);
+                yield return null;
+            }
+            yield break;
+        }*/
+    public void CardUnscale(GameObject card)
     {
         if (scaledCard != null)
         {
             Destroy(scaledCard.gameObject);
         }
-        
+        if (linkToUnscale != null)
+        {
+
+            print("aaaaa");
+
+            linkToUnscale.transform.localScale /= 2.5f;
+            linkToUnscale.transform.position = new Vector3(linkToUnscale.transform.position.x, linkToUnscale.transform.position.y - 2f, oldZPosition);
+            linkToUnscale.transform.rotation = oldRotation;
+            linkToUnscale = null;
+        }
+
+
     }
     private void ReturnToStartPosition(Transform card, Vector3 startCardPos)
     {
-       
+
         currentCard = card;
         startCardPosition = startCardPos;
         StartCoroutine(Move('r', null));
@@ -169,7 +226,7 @@ public class CardHandler : MonoBehaviour
         while (true)
         {
             Array.Clear(hasMoved, 0, hasMoved.Length);
-            List<GameObject>currentListOfCards = new List<GameObject>(GameProcess.BattleGroundCards);
+            List<GameObject> currentListOfCards = new List<GameObject>(GameProcess.BattleGroundCards);
             currentListOfCards.Sort((x, y) => x.transform.position.x.CompareTo(y.transform.position.x));
 
             for (int i = 0; i < GameProcess.BattleGroundCards.Count; i++)
@@ -186,14 +243,15 @@ public class CardHandler : MonoBehaviour
                     break;
                 }
                 else yield break;
-            } 
+            }
         }
     }
-    private IEnumerator Move(char flag, List<Vector2> places)
+    private IEnumerator Move(char flag, List<Vector3> places)
     {
 
-        bool[] hasMoved = new bool[places==null? 1:places.Count];
-        while (true){
+        bool[] hasMoved = new bool[places == null ? 1 : places.Count];
+        while (true)
+        {
             Array.Clear(hasMoved, 0, hasMoved.Length);
             List<GameObject> currentListOfCards = new List<GameObject>();
 
@@ -211,14 +269,16 @@ public class CardHandler : MonoBehaviour
                 default:
                     break;
             }
-
+            FreezeCardScale(currentListOfCards, false);
             if (flag == 'r')
             {
-                while(Vector2.Distance(currentCard.position, startCardPosition) != 0)
+                currentCard.gameObject.GetComponent<CardState>().scalable = false;
+                while (Vector2.Distance(currentCard.position, startCardPosition) != 0)
                 {
                     currentCard.position = Vector2.MoveTowards(currentCard.position, startCardPosition, cardSpeed);
-                    yield return null; 
+                    yield return null;
                 }
+                currentCard.gameObject.GetComponent<CardState>().scalable = true;
                 yield break;
             }
             for (int i = 0; i < places.Count; i++)
@@ -230,13 +290,24 @@ public class CardHandler : MonoBehaviour
             bool stillMove = false;
             for (int i = 0; i < currentListOfCards.Count; i++)
             {
-                if (!hasMoved[i]){ stillMove = true; break; }
+                if (!hasMoved[i]) { stillMove = true; break; }
                 else stillMove = false;
             }
             if (stillMove) yield return null;
-            else yield break;
+            else
+            {
+                FreezeCardScale(currentListOfCards, true);
+                yield break;
+            }
         }
     }
-}
+    private void FreezeCardScale(List<GameObject> list, bool FreezeOrUnfreeze)
+    {
+        for (int i = 0; i < list.Count; i++)
+        {
+            list[i].GetComponent<CardState>().scalable = FreezeOrUnfreeze;
+        }
+    }
 
- 
+
+}

@@ -17,7 +17,7 @@ public class UpdateShop : MonoBehaviour
     private static TextMeshProUGUI cardHealth;
     private static TextMeshProUGUI cardLevel;
 
-    private static List<Vector2> places;
+    private static List<Vector3> places;
     // Start is called before the first frame update
     void Start()
     {

@@ -99,10 +99,10 @@ PrefabInstance:
     - target: {fileID: 458447017549416176, guid: c1b7a826c996b734d9d27f648fda4927, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 79e2e709f06cd9d4b8153d31a78da104, type: 3}
+      objectReference: {fileID: 21300000, guid: 8bd45bd6e800fbe4fbc66b84f8be7b5c, type: 3}
     - target: {fileID: 687854865772983229, guid: c1b7a826c996b734d9d27f648fda4927, type: 3}
       propertyPath: m_text
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4049909818680356061, guid: c1b7a826c996b734d9d27f648fda4927, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -118,7 +118,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7814503491401347039, guid: c1b7a826c996b734d9d27f648fda4927, type: 3}
       propertyPath: m_text
-      value: 2
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8613113086064152366, guid: c1b7a826c996b734d9d27f648fda4927, type: 3}
       propertyPath: m_Name

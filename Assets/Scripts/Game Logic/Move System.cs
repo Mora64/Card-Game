@@ -35,7 +35,7 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        cardHandler.CardUnscale();
+        cardHandler.CardUnscale(this.gameObject);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -72,7 +72,7 @@ public void OnPointerUp(PointerEventData eventData)
 
         }
         
-        cardHandler.CardUnscale();  
+        cardHandler.CardUnscale(this.gameObject);  
 
     }
 }
