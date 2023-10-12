@@ -50,6 +50,7 @@ public class Battle : MonoBehaviour
             state.moveable = false;
         }
 
+
         places = GameProcess.GetNewCardPlaces('c', GameProcess.BattleGroundCards.Count);
         for (int i = 0; i < GameProcess.BattleGroundCards.Count; i++)
         {
