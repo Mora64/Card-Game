@@ -10,6 +10,8 @@ public class GameProcess : MonoBehaviour
     private AudioSource _audioSource;
     static private float _currentVolume = 0;
     [SerializeField] private Slider slider;
+
+
     //Shop
     static public int amountOfCardInShop = 3;
     static public List<Card> currentCardsInShop;
