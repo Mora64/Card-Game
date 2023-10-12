@@ -16,4 +16,6 @@ public class CardDataBase
         cards.Add(new Card("Cauldron", "f", 4, 4, 0, 4, new List<Card.CardSpeciallAbility> { Card.CardSpeciallAbility.BattleCry }, Resources.Load<Sprite>("cauldron")));
         //cards.Add(new Card());
     }
+
+    //o
 }
