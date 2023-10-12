@@ -40,11 +40,8 @@ public class MoveSystem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (this.GetComponent<CardState>().state != CardState.State.HandCard)
-        {
-            cardHandler.CardScale(this.gameObject);
-        }
         
+        cardHandler.CardScale(this.gameObject);
     }
    
 

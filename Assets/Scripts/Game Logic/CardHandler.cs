@@ -30,27 +30,35 @@ public class CardHandler : MonoBehaviour
 
                 if (card.position.y < GameProcess.HandZone)
                 {
-                    GameObject fullcard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x, card.transform.position.y), card.transform.rotation);
-                    fullcard.transform.localScale *= 0.5f;
+                    if(Character.money >= Character.buyingCardCost)
+                    {
+                        GameObject fullcard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x, card.transform.position.y), card.transform.rotation);
+                        fullcard.transform.localScale *= 0.5f;
 
-                    fullcard.GetComponent<CardState>().card = card.GetComponent<CardState>().card;
-                    fullcard.GetComponent<CardState>().state = CardState.State.HandCard;
-                    fullcard.GetComponent<CardState>().scalable = false;
-                    GameProcess.HandCards.Add(fullcard.gameObject);
-                    GameProcess.ShopCards.Remove(card.gameObject);
+                        fullcard.GetComponent<CardState>().card = card.GetComponent<CardState>().card;
+                        fullcard.GetComponent<CardState>().state = CardState.State.HandCard;
+                        fullcard.GetComponent<CardState>().scalable = true;
+                        GameProcess.HandCards.Add(fullcard.gameObject);
+                        GameProcess.ShopCards.Remove(card.gameObject);
 
-                    Destroy(card.gameObject);
-                    print(fullcard.transform.rotation);
+                        Destroy(card.gameObject);
+                        //print(fullcard.transform.rotation);
 
-                    //Shifting Hand-Cards
-                    List<Vector3> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
-                    StartCoroutine(Move('h', places));
+                        //Shifting Hand-Cards
+                        List<Vector3> places = GameProcess.GetNewCardPlaces('h', GameProcess.HandCards.Count);
+                        StartCoroutine(Move('h', places));
 
-                    //Shifting Shop-Cards
-                    places = GameProcess.GetNewCardPlaces('s', GameProcess.ShopCards.Count);
-                    StartCoroutine(Move('s', places));
+                        //Shifting Shop-Cards
+                        places = GameProcess.GetNewCardPlaces('s', GameProcess.ShopCards.Count);
+                        StartCoroutine(Move('s', places));
 
-                    Character.money -= Character.buyingCardCost;
+                        Character.money -= Character.buyingCardCost;
+
+                    }
+                    else
+                    {
+                        ReturnToStartPosition(card, startCardPos);
+                    }
 
                 }
                 else ReturnToStartPosition(card, startCardPos);
@@ -159,24 +167,21 @@ public class CardHandler : MonoBehaviour
             {
                 if (card.GetComponent<CardState>().state != CardState.State.HandCard)
                 {
-                    /* GameObject obj = MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card);
-                     oldLocalScale = obj.transform.localScale;
-                     obj.transform.localScale /= 4;*/
+                    
+                    oldLocalScale = card.transform.localScale;
+                    
                     scaledCard = Instantiate(MakeFullCard(fullCardPrefab, card.GetComponent<CardState>().card), new Vector2(card.transform.position.x + 3, card.transform.position.y), card.transform.rotation).transform;
-
+                    scaledCard.transform.localScale /= 4;
+                    StartCoroutine(SmoothScaling(scaledCard, oldLocalScale));
                 }
 
                 else
                 {
-                    /*BoxCollider2D boxCollider = card.GetComponent<BoxCollider2D>();
-                    oldZPosition = card.transform.position.z;
-                    card.transform.position = new Vector3(card.transform.position.x, card.transform.position.y + 2f, -7);
-                    card.transform.localScale *= 2.5f;
+                    scaledCard = Instantiate(card, new Vector3(card.transform.position.x, card.transform.position.y+2f, card.transform.position.z), card.transform.rotation).transform;
+                    scaledCard.transform.localScale *= 2.5f;
+                    scaledCard.transform.rotation = Quaternion.identity;
+                    card.layer = LayerMask.NameToLayer("inv");
                     linkToUnscale = card;
-                    oldRotation = card.transform.rotation;
-                    Quaternion rot1 = new Quaternion();
-                    rot1.eulerAngles = new Vector3(0, 0, 0);
-                    card.transform.rotation = rot1;*/
                 }
             }
 
@@ -184,31 +189,32 @@ public class CardHandler : MonoBehaviour
 
 
     }
-    /*    private IEnumerator SmoothScaling(Transform t, Vector3 v)
-        {
+    private IEnumerator SmoothScaling(Transform t, Vector3 v)
+    {
 
-            while (t.localScale != v)
-            {
-                t.localScale = Vector3.Lerp(t.localScale, v, Time.deltaTime);
-                yield return null;
-            }
-            yield break;
-        }*/
+        while (t.localScale != v)
+        {
+            t.localScale = Vector3.MoveTowards(t.localScale, v, Time.deltaTime*4);
+            yield return null;
+        }
+        yield break;
+    }
     public void CardUnscale(GameObject card)
     {
         if (scaledCard != null)
         {
+            StopAllCoroutines();
             Destroy(scaledCard.gameObject);
         }
         if (linkToUnscale != null)
         {
 
-            print("aaaaa");
-
-            linkToUnscale.transform.localScale /= 2.5f;
-            linkToUnscale.transform.position = new Vector3(linkToUnscale.transform.position.x, linkToUnscale.transform.position.y - 2f, oldZPosition);
-            linkToUnscale.transform.rotation = oldRotation;
-            linkToUnscale = null;
+            //print("aaaaa");
+            linkToUnscale.layer = LayerMask.NameToLayer("Default");
+            //linkToUnscale.transform.localScale /= 2.5f;
+            //linkToUnscale.transform.position = new Vector3(linkToUnscale.transform.position.x, linkToUnscale.transform.position.y - 2f, oldZPosition);
+            //linkToUnscale.transform.rotation = oldRotation;
+            //linkToUnscale = null;
         }
 
 

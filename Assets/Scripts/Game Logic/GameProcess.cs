@@ -23,7 +23,7 @@ public class GameProcess : MonoBehaviour
     private static float DEFAULTCARDWIDTH = 1.756f;
     private static float HANDCARDWIDTH = 1.34f;
     private static float DEFAULTSPACING = 0.25f;
-    private static float HANDCARDSPACING = -0.5f;
+    private static float HANDCARDSPACING = 0f;
 
     //card grid positions;
     private static Vector2 shopGridPosition;

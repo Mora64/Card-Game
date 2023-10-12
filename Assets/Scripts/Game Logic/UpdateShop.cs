@@ -27,14 +27,30 @@ public class UpdateShop : MonoBehaviour
 
     public static void ShopUpdate()
     {
-        print("UPDATESHOP");
-        if(Character.amountOfSpeciallUpdateShopCost != 0)
+
+        if (Character.amountOfSpeciallUpdateShopCost != 0)
         {
-            Character.money -= Character.updateShopCost;
-            Character.amountOfSpeciallUpdateShopCost--;
+            if (Character.money > Character.updateShopCost)
+            {
+                Character.money -= Character.updateShopCost;
+                Character.amountOfSpeciallUpdateShopCost--;
+            }
+
         }
-        else Character.money -= Character.defaultUpdateShopCost;
-   
+
+       
+        
+            else if(Character.money >= Character.defaultUpdateShopCost)
+            {
+                Character.money -= Character.defaultUpdateShopCost;
+            }
+
+        
+        else
+        {
+            return;
+        }
+        
         for(int i = 0; i < GameProcess.ShopCards.Count; i++)
         {
             

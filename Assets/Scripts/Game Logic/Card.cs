@@ -13,8 +13,8 @@ public class Card
     public int costOfSelling = 1;
     public List<CardSpeciallAbility> cardSpeciallAbilities;
     public Sprite spriteImage;
-    public List<Race> race;
-    public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, List<CardSpeciallAbility> _cardSpeciallAbilities,List<Race> _races,Sprite _sprite)
+    public Race race;
+    public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, List<CardSpeciallAbility> _cardSpeciallAbilities,Sprite _sprite)
     {
         name = _name;
         description = _description;
@@ -24,7 +24,7 @@ public class Card
         idOfAbility = _IdOfAbility;
         cardSpeciallAbilities = _cardSpeciallAbilities;
         spriteImage = _sprite;
-        race = _races;
+
     }
     public Card(Card card)
     {
