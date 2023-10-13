@@ -10,13 +10,15 @@ public class Battle : MonoBehaviour
     public GameObject _cardPrefabCopy;
     List<GameObject> CharacterBattleCards;
     List<GameObject> EnemyBattleCards;
-    
+
+    List<GameObject> attackerList = new List<GameObject>();
+    List<GameObject> defenderList = new List<GameObject>();
+
     int whoAttacking;
-    int RandomEnemyCard;
-    int RandomCharacterCard;
     int CurrentCharacterCard = 0;
     int CurrentEnemyCard = 0;
     bool goToShopScene = false;
+    bool isAtackingCharacter = false;
     Vector3 startCardPos;
     void Start()
     {
@@ -32,7 +34,7 @@ public class Battle : MonoBehaviour
     {
         if (goToShopScene)
         {
-            SceneManager.LoadScene("Shop");
+            StartCoroutine(EndOfTheBattle());
         }
     }
     private void GenerateCardsInBattle()
@@ -51,7 +53,7 @@ public class Battle : MonoBehaviour
         }
 
 
-        places = GameProcess.GetNewCardPlaces('c', GameProcess.BattleGroundCards.Count);
+        places = GameProcess.GetNewCardPlaces('b', GameProcess.BattleGroundCards.Count);
         for (int i = 0; i < GameProcess.BattleGroundCards.Count; i++)
         {
             GameProcess.BattleGroundCards[i].SetActive(true);
@@ -67,75 +69,42 @@ public class Battle : MonoBehaviour
     }
     IEnumerator BattleProcess()
     {
-        List<GameObject> attacker = new List<GameObject>();
-        List<GameObject> defender = new List<GameObject>();
+        
         int CurrentCard;
         int RandomCard;
-        bool isAtackingCharacter = false;
+        
 
         while(EnemyBattleCards.Count != 0 || CharacterBattleCards.Count != 0)
         {
             //Calculating who will atacking first and who will defence
             if (whoAttacking == 1)
             {
-                attacker = CharacterBattleCards;
+                attackerList = CharacterBattleCards;
                 isAtackingCharacter = true;
-                defender = EnemyBattleCards;
+                defenderList = EnemyBattleCards;
                 CurrentCard = CurrentCharacterCard;
                 RandomCard = (int)Random.Range(0, EnemyBattleCards.Count - 0.1f);
             }
             else
             {
-                attacker = EnemyBattleCards;
+                attackerList = EnemyBattleCards;
                 isAtackingCharacter = false;
-                defender = CharacterBattleCards;
+                defenderList = CharacterBattleCards;
                 CurrentCard = CurrentEnemyCard;
                 RandomCard = (int)Random.Range(0, CharacterBattleCards.Count - 0.1f);
 
             }
 
-            if (CurrentCard >= attacker.Count) CurrentCard = 0;
-            if (attacker.Count == 0) {goToShopScene = true; yield break;} 
+            if (CurrentCard >= attackerList.Count) CurrentCard = 0;
+            if (attackerList.Count == 0) {goToShopScene = true; yield break;} 
 
-            startCardPos = attacker[CurrentCard].transform.position;
+            startCardPos = attackerList[CurrentCard].transform.position;
 
-            //atack card animation
-            while (Vector2.Distance(attacker[CurrentCard].transform.position, defender[RandomCard].transform.position) != 0)
-            {
-                attacker[CurrentCard].transform.position = Vector2.MoveTowards(attacker[CurrentCard].transform.position, defender[RandomCard].transform.position, 0.01f);
-                yield return null;
-            }
+            yield return Attack(attackerList[CurrentCard], defenderList[RandomCard], startCardPos);
 
-            //health cards updates
-            defender[RandomCard].GetComponent<CardState>().card.health -= attacker[CurrentCard].GetComponent<CardState>().card.attack;
-            GameProcess.UpdateCard(defender[RandomCard], defender[RandomCard].GetComponent<CardState>().card, false);
-            attacker[CurrentCard].GetComponent<CardState>().card.health -= defender[RandomCard].GetComponent<CardState>().card.attack;
-            GameProcess.UpdateCard(attacker[CurrentCard], attacker[CurrentCard].GetComponent<CardState>().card,false);
-
-            //return back card animation
-            while (Vector2.Distance(attacker[CurrentCard].transform.position, startCardPos) != 0)
-            {
-                attacker[CurrentCard].transform.position = Vector2.MoveTowards(attacker[CurrentCard].transform.position, startCardPos, 0.02f);
-                yield return null;
-            }
-
-            //if health of card = 0; delete this card from scene
-            if (defender[RandomCard].GetComponent<CardState>().card.health <= 0) {
-                GameObject temp = defender[RandomCard];
-                defender.Remove(defender[RandomCard]);
-                Destroy(temp);
-            }
-
-            if (attacker[CurrentCard].GetComponent<CardState>().card.health <= 0)
-            {
-                GameObject temp = attacker[CurrentCard];
-                attacker.Remove(attacker[CurrentCard]);
-                Destroy(temp);
-            }
-
-            if(CurrentCard > attacker.Count) CurrentCard = 0;
-            if(attacker.Count == 0) {goToShopScene = true; yield break;}
-            if (defender.Count == 0){goToShopScene = true; yield break;}
+            if(CurrentCard > attackerList.Count) CurrentCard = 0;
+            if(attackerList.Count == 0) {goToShopScene = true; yield break;}
+            if (defenderList.Count == 0){goToShopScene = true; yield break;}
 
             //updating values
             whoAttacking = whoAttacking == 0 ? 1 : 0;
@@ -146,6 +115,96 @@ public class Battle : MonoBehaviour
         }
         goToShopScene = true;
         yield break;
+        
+    }
+    IEnumerator Attack(GameObject attacker, GameObject defender, Vector3 startPos)
+    {
+        Vector3 startScale = attacker.transform.localScale;
+        float scalingValue = 1.2f;
+        float scalingSpeed = 0.4f;
+        float movingSpeed = 8f;
+        //scaling current attacking card
+        while(attacker.transform.localScale != startScale * scalingValue)
+        {
+            attacker.transform.localScale = Vector3.MoveTowards(attacker.transform.localScale, startScale * scalingValue, Time.deltaTime * scalingSpeed);
+            yield return null;
+        }
+
+        //moving current card to target
+        Vector2 targetPoint = Vector3.zero;
+        Bounds bounds = defender.GetComponent<BoxCollider2D>().bounds;
+        if (isAtackingCharacter)
+        {
+            if (attacker.transform.position.x == defender.transform.position.x)
+            {
+                targetPoint = new Vector2(bounds.center.x, bounds.center.y - GameProcess.CARDHEIGHT / 4);
+            }
+            else if (attacker.transform.position.x > defender.transform.position.x)
+            {
+                targetPoint = new Vector3(bounds.max.x, bounds.min.y);
+            }
+            else
+            {
+                targetPoint = new Vector3(bounds.min.x, bounds.min.y);
+            }
+        }
+        else
+        {
+            if (attacker.transform.position.x == defender.transform.position.x)
+            {
+                targetPoint = new Vector2(bounds.center.x, bounds.center.y + GameProcess.CARDHEIGHT / 4);
+            }
+            else if (attacker.transform.position.x > defender.transform.position.x)
+            {
+                targetPoint = new Vector2(bounds.max.x, bounds.max.y);
+            }
+            else
+            {
+                targetPoint = new Vector2(bounds.min.x, bounds.max.y);
+            }
+        }
+
+
+        while (Vector2.Distance(attacker.transform.position, targetPoint) != 0)
+        {
+            attacker.transform.position = Vector2.MoveTowards(attacker.transform.position, targetPoint, Time.deltaTime * movingSpeed);
+            yield return null;
+        }
+
+        //health cards updates
+        defender.GetComponent<CardState>().card.health -= attacker.GetComponent<CardState>().card.attack;
+        GameProcess.UpdateCard(defender, defender.GetComponent<CardState>().card, false);
+        attacker.GetComponent<CardState>().card.health -= defender.GetComponent<CardState>().card.attack;
+        GameProcess.UpdateCard(attacker, attacker.GetComponent<CardState>().card, false);
+
+        //return back card animation
+        while (Vector2.Distance(attacker.transform.position, startCardPos) != 0 && attacker.transform.localScale != startScale)
+        {
+            attacker.transform.position = Vector2.MoveTowards(attacker.transform.position, startCardPos, 0.02f);
+            attacker.transform.localScale = Vector3.MoveTowards(attacker.transform.localScale, startScale, Time.deltaTime * scalingSpeed);
+            yield return null;
+        }
+
+        //if health of card = 0; delete this card from scene
+        if (defender.GetComponent<CardState>().card.health <= 0)
+        {
+            GameObject temp = defender;
+            defenderList.Remove(defender);
+            Destroy(temp);
+        }
+
+        if (attacker.GetComponent<CardState>().card.health <= 0)
+        {
+            GameObject temp = attacker;
+            attackerList.Remove(attacker);
+            Destroy(temp);
+        }
+
+    }
+    IEnumerator EndOfTheBattle()
+    {
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("Shop");
         
     }
 

@@ -11,19 +11,20 @@ public class GameProcess : MonoBehaviour
     static private float _currentVolume = 0;
     [SerializeField] private Slider slider;
 
-
     //Shop
     static public int amountOfCardInShop = 3;
     static public List<Card> currentCardsInShop;
+    public static int amountOfCardsInShop;
+    public static bool FreezeShop = false;
 
     //Zones
     public static float HandZone = -2.5f;
     public static float BattleGroundZone = 0.35f;
     public static float ShopZone = 3f;
     //Card size
-    private static float CARDHEIGHT = 3f;
+    public static float CARDHEIGHT = 3f;
     private static float DEFAULTCARDWIDTH = 1.756f;
-    private static float HANDCARDWIDTH = 1.34f;
+    public static float HANDCARDWIDTH = 1.34f;
     private static float DEFAULTSPACING = 0.25f;
     private static float HANDCARDSPACING = 0f;
 
@@ -39,12 +40,10 @@ public class GameProcess : MonoBehaviour
     public static List<GameObject> HandCards;
     public static List<GameObject> EnemyCards;
 
+    //Parabolic cards vies in "Hand"
     private static float angelForEachHandCard = 7f;
+    private static float defaultDeltaPotision = 0.2f;
 
-    private static float defaultDeltaPotision = 0.1f;
-    public static bool FreezeShop = false;
-
-    public static int amountOfCardsInShop;
     [SerializeField] private static GameObject _cardPrefab;
     private void Awake()
     {
@@ -168,11 +167,7 @@ public class GameProcess : MonoBehaviour
             DontDestroyOnLoad(obj);
             obj.SetActive(false);
         }
-        /*foreach (GameObject obj in ShopCards)
-        {
-            DontDestroyOnLoad(obj);
-            obj.SetActive(false);
-        }*/
+       
         ShopCards.Clear();
         foreach (GameObject obj in BattleGroundCards)
         {
@@ -251,6 +246,8 @@ public class GameProcess : MonoBehaviour
                 z++;
                 deltaPosition *= 2;
             }
+            places[center] = new Vector3(places[center].x, places[center].y-defaultDeltaPotision/2, places[center].z);
+            places[center+1] = new Vector3(places[center+1].x, places[center+1].y - defaultDeltaPotision/2, places[center+1].z);
         }
         else
         {
@@ -269,10 +266,8 @@ public class GameProcess : MonoBehaviour
                 z++;
                 deltaPosition *= 2;
             }
+            places[center] = new Vector3(places[center].x, places[center].y - defaultDeltaPotision/2, places[center].z);
         }
-
-
-
     }
 
 

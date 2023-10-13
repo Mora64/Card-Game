@@ -14,13 +14,30 @@ public class CardHandler : MonoBehaviour
     private Transform scaledCard;
     public GameObject fullCardPrefab;
     public GameObject linkToUnscale;
-    private Quaternion oldRotation;
-    private float oldZPosition;
     private Vector3 oldLocalScale;
     public bool HoldongCard = false;
 
+    [SerializeField] private TextMeshProUGUI textWarning;
     [SerializeField] private GameObject _cardPrefab;
 
+    private string notEnoughMoneyWarning = "You don't have enough money";
+    private string limitOfCardsInHand = "You have too many cards in your hand";
+    private IEnumerator MakeWarning(string text)
+    {
+        textWarning.text = text;
+        while(textWarning.color.a != 255)
+        {
+            textWarning.color = new Color(textWarning.color.r, textWarning.color.g, textWarning.color.b, textWarning.color.a + 1);
+            yield return null;
+        }
+        yield return new WaitForSeconds(1.5f);
+
+        while (textWarning.color.a != 0)
+        {
+            textWarning.color = new Color(textWarning.color.r, textWarning.color.g, textWarning.color.b, textWarning.color.a - 1);
+            yield return null;
+        }
+    }
     public void Insert(Transform card, Vector3 startCardPos)
     {
 
@@ -57,6 +74,7 @@ public class CardHandler : MonoBehaviour
                     }
                     else
                     {
+                        StartCoroutine(MakeWarning(notEnoughMoneyWarning));
                         ReturnToStartPosition(card, startCardPos);
                     }
 
@@ -208,13 +226,7 @@ public class CardHandler : MonoBehaviour
         }
         if (linkToUnscale != null)
         {
-
-            //print("aaaaa");
             linkToUnscale.layer = LayerMask.NameToLayer("Default");
-            //linkToUnscale.transform.localScale /= 2.5f;
-            //linkToUnscale.transform.position = new Vector3(linkToUnscale.transform.position.x, linkToUnscale.transform.position.y - 2f, oldZPosition);
-            //linkToUnscale.transform.rotation = oldRotation;
-            //linkToUnscale = null;
         }
 
 
