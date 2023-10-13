@@ -14,7 +14,7 @@ public class Card
     public List<CardSpeciallAbility> cardSpeciallAbilities;
     public Sprite spriteImage;
     public Race race;
-    public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, List<CardSpeciallAbility> _cardSpeciallAbilities,Sprite _sprite)
+    public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, List<CardSpeciallAbility> _cardSpeciallAbilities,Race _race,Sprite _sprite)
     {
         name = _name;
         description = _description;
@@ -24,7 +24,7 @@ public class Card
         idOfAbility = _IdOfAbility;
         cardSpeciallAbilities = _cardSpeciallAbilities;
         spriteImage = _sprite;
-
+        race = _race;
     }
     public Card(Card card)
     {
@@ -64,14 +64,14 @@ public class Card
     public enum Race
     {
         All,
-        Demon,
-        Undead,
-        Beast,
-        Mechanism,
-        Murlock,
-        Dragon,
-        Elemental,
-        Naga,
+        Demon, //+
+        Undead, //7
+        Beast, //8
+        Mechanism, //4
+        Dragon, //9
+        Elemental, //4
+        Naga, //
+        None,
     }
     
 

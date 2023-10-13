@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 public class Character : MonoBehaviour
 {
-    public static int money = 7;
+    public static int money = 70;
     public static List<Card> Cards;
     private TextMeshProUGUI moneyText;
     public static int defaultUpdateShopCost = 1;
