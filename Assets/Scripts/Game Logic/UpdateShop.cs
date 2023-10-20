@@ -75,10 +75,10 @@ public class UpdateShop : MonoBehaviour
     public static  GameObject ReadCard1(Card card)
     {
 
-        cardAttack = cardPrefabCopy.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardHealth = cardPrefabCopy.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardLevel = cardPrefabCopy.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
-        cardImage = cardPrefabCopy.transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        cardAttack = cardPrefabCopy.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
+        cardHealth = cardPrefabCopy.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
+        cardLevel = cardPrefabCopy.transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();
+        cardImage = cardPrefabCopy.transform.GetChild(1).GetChild(0).GetComponent<Image>();
 
         cardImage.sprite = card.spriteImage;
         cardAttack.text = card.attack.ToString();

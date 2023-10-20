@@ -161,20 +161,20 @@ public class CardHandler : MonoBehaviour
     }
     public GameObject MakeFullCard(GameObject obj, Card card)
     {
-        obj.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
-        obj.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.health.ToString();
-        obj.transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.level.ToString();
-        obj.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.name;
-        obj.transform.GetChild(6).GetComponent<TextMeshProUGUI>().text = card.description;
-        obj.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = card.spriteImage;
+        obj.transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
+        obj.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.health.ToString();
+        obj.transform.GetChild(5).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.level.ToString();
+        obj.transform.GetChild(6).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.name;
+        obj.transform.GetChild(7).GetComponent<TextMeshProUGUI>().text = card.description;
+        obj.transform.GetChild(2).GetChild(0).GetComponent<Image>().sprite = card.spriteImage;
         return obj;
     }
     public static GameObject MakeSmallCard(GameObject _cardPrefab, Card card)
     {
-        _cardPrefab.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
-        _cardPrefab.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.health.ToString();
-        _cardPrefab.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.level.ToString();
-        _cardPrefab.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = card.spriteImage;
+        _cardPrefab.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.attack.ToString();
+        _cardPrefab.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.health.ToString();
+        _cardPrefab.transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>().text = card.level.ToString();
+        _cardPrefab.transform.GetChild(1).GetChild(0).GetComponent<Image>().sprite = card.spriteImage;
         return _cardPrefab;
     }
     public void CardScale(GameObject card)

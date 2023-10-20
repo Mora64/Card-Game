@@ -11,6 +11,9 @@ public class Character : MonoBehaviour
     public static int updateShopCost = 1;
     public static int amountOfSpeciallUpdateShopCost = 0;
     public static int buyingCardCost = 3;
+
+    public static int health = 30;
+    public static int level = 1;
     public static int Money
     {
         get

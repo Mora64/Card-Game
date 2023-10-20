@@ -69,7 +69,7 @@ public class GameProcess : MonoBehaviour
         Shop.cardsInShop = new List<Card>();
 
         //card grid positions;
-        shopGridPosition = new Vector2(0, 3.5f);
+        shopGridPosition = new Vector2(0, 3f);
         battlegroundGridPosition = new Vector2(0, -0.28f);
         handGridPosition = new Vector2(0, -4f);
     }
@@ -143,9 +143,9 @@ public class GameProcess : MonoBehaviour
         TextMeshProUGUI _cardHealth;
         TextMeshProUGUI _cardLevel;
 
-        _cardAttack = obj.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
-        _cardHealth = obj.transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>();
-        _cardLevel = obj.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
+        _cardAttack = obj.transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>();
+        _cardHealth = obj.transform.GetChild(2).GetChild(0).GetComponent<TextMeshProUGUI>();
+        _cardLevel = obj.transform.GetChild(4).GetChild(0).GetComponent<TextMeshProUGUI>();
 
         _cardAttack.text = card.attack.ToString();
         _cardHealth.text = card.health.ToString();
@@ -269,6 +269,14 @@ public class GameProcess : MonoBehaviour
             places[center] = new Vector3(places[center].x, places[center].y - defaultDeltaPotision/2, places[center].z);
         }
     }
-
+    public void UpgradeShop()
+    {
+        if (Character.level == 5)
+        {
+            GameObject.FindGameObjectWithTag("UpgradeShop").SetActive(false);
+        }
+        Character.level++;
+        GameObject.FindGameObjectWithTag("UpgradeShop").GetComponent<TextMeshProUGUI>().text = Character.level.ToString();
+    }
 
 }

@@ -59,7 +59,8 @@ public class Card
         Provocation,
         Schield,
         BattleCry,
-        AfterSelling
+        AfterSelling,
+        AtTheEndOFTheTimer
     }
     public enum Race
     {
