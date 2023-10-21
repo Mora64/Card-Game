@@ -16,7 +16,7 @@ public class GameProcess : MonoBehaviour
     static public List<Card> currentCardsInShop;
     public static int amountOfCardsInShop;
     public static bool FreezeShop = false;
-
+    public static int upgradeShopCost = 5;
     //Zones
     public static float HandZone = -2.5f;
     public static float BattleGroundZone = 0.35f;
@@ -269,14 +269,6 @@ public class GameProcess : MonoBehaviour
             places[center] = new Vector3(places[center].x, places[center].y - defaultDeltaPotision/2, places[center].z);
         }
     }
-    public void UpgradeShop()
-    {
-        if (Character.level == 5)
-        {
-            GameObject.FindGameObjectWithTag("UpgradeShop").SetActive(false);
-        }
-        Character.level++;
-        GameObject.FindGameObjectWithTag("UpgradeShop").GetComponent<TextMeshProUGUI>().text = Character.level.ToString();
-    }
+    
 
 }

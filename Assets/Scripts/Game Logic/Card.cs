@@ -54,13 +54,17 @@ public class Card
     public enum CardSpeciallAbility
     {
         None,
-        AfterDeath,
+        AfterHisDeath,
         AtTheStart,
         Provocation,
         Schield,
         BattleCry,
         AfterSelling,
-        AtTheEndOFTheTimer
+        AtTheEndOFTheTimer,
+        WhenCardGetDamage,
+        Rebirth,
+        AfterCreatureDeath,
+        AfterPlayingCard,
     }
     public enum Race
     {
