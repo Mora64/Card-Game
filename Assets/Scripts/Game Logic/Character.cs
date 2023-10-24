@@ -14,6 +14,8 @@ public class Character : MonoBehaviour
 
     public static int health = 30;
     public static int level = 1;
+
+    public static bool lostLastCombat = false;
     public static int Money
     {
         get

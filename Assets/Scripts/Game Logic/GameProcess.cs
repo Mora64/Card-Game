@@ -45,6 +45,8 @@ public class GameProcess : MonoBehaviour
     private static float defaultDeltaPotision = 0.2f;
 
     [SerializeField] private static GameObject _cardPrefab;
+
+    
     private void Awake()
     {
         DontDestroyOnLoad(this);

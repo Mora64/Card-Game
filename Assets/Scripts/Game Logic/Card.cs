@@ -14,6 +14,7 @@ public class Card
     public List<CardSpeciallAbility> cardSpeciallAbilities;
     public Sprite spriteImage;
     public Race race;
+    public int revenge = 0;
     public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility, List<CardSpeciallAbility> _cardSpeciallAbilities,Race _race,Sprite _sprite)
     {
         name = _name;
@@ -25,6 +26,19 @@ public class Card
         cardSpeciallAbilities = _cardSpeciallAbilities;
         spriteImage = _sprite;
         race = _race;
+    }
+    public Card(string _name, string _description, int _attack, int _health, int _level, int _IdOfAbility,  int _revenge, List<CardSpeciallAbility> _cardSpeciallAbilities, Race _race, Sprite _sprite)
+    {
+        name = _name;
+        description = _description;
+        attack = _attack;
+        health = _health;
+        level = _level;
+        idOfAbility = _IdOfAbility;
+        cardSpeciallAbilities = _cardSpeciallAbilities;
+        spriteImage = _sprite;
+        race = _race;
+        revenge = _revenge;
     }
     public Card(Card card)
     {
@@ -55,7 +69,8 @@ public class Card
     {
         None,
         AfterHisDeath,
-        AtTheStart,
+        AtTheStartOfTheTurn,
+        AtTheStartOfTheBattle,
         Provocation,
         Schield,
         BattleCry,
@@ -65,6 +80,14 @@ public class Card
         Rebirth,
         AfterCreatureDeath,
         AfterPlayingCard,
+        GivingTempBuff,
+        AfterBuying,
+        SpellCraft,
+        Revenge,
+        AfterSummon,
+
+        
+
     }
     public enum Race
     {
