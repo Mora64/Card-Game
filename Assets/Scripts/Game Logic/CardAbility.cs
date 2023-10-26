@@ -32,7 +32,7 @@ public class CardAbility : MonoBehaviour
             case 5:
                 GameObject RandomCard1 = GameProcess.BattleGroundCards[(int)Random.Range(0f, GameProcess.BattleGroundCards.Count - 0.01f)];
                 RandomCard1.GetComponent<CardState>().card.attack += 2;
-                RandomCard1.GetComponent<CardState>().card.attack++;
+                RandomCard1.GetComponent<CardState>().card.health++;
                 GameProcess.UpdateCard(RandomCard1, RandomCard1.GetComponent<CardState>().card, true);
                 break;
             case 6:
@@ -50,10 +50,7 @@ public class CardAbility : MonoBehaviour
                     GameProcess.UpdateCard(GameProcess.BattleGroundCards[i], GameProcess.BattleGroundCards[i].GetComponent<CardState>().card, true);
                 }
                 break;
-            case 9:
-                Character.money += 3;
-                Character.health -= 3;
-                break;
+            
             case 10:
                 if (Character.lostLastCombat)
 
@@ -123,6 +120,13 @@ public class CardAbility : MonoBehaviour
                     GameProcess.UpdateCard(GameProcess.BattleGroundCards[i], GameProcess.BattleGroundCards[i].GetComponent<CardState>().card, true);
                 }
                 break;
+            case 24:
+                obj.GetComponent<CardState>().card.attack += Character.wastedGoldInPreviousTurn / 2;
+                obj.GetComponent<CardState>().card.health += Character.wastedGoldInPreviousTurn / 2;
+                GameProcess.UpdateCard(obj, obj.GetComponent<CardState>().card, true);
+                break;
+           
+           
             
 
         }
@@ -149,7 +153,29 @@ public class CardAbility : MonoBehaviour
                     }
                 }
                 break;
-
+            case 20:
+                //instantiate 2 turkey in battle
+                break;
+        }
+    }
+    public static void AfterSummon(GameObject abilityOwner, GameObject summonedCard, int id, List<GameObject> attakers, List<GameObject> defenders)
+    {
+        switch (id)
+        {
+            case 21:
+                if(summonedCard.GetComponent<CardState>().card.race == Card.Race.Beast)
+                {
+                    for(int i = 0; i < defenders.Count; i++)
+                    {
+                        if (defenders[i].GetComponent<CardState>().card.race == Card.Race.Beast)
+                        {
+                            defenders[i].GetComponent<CardState>().card.attack += 5;
+                            defenders[i].GetComponent<CardState>().card.health += 5;
+                            GameProcess.UpdateCard(defenders[i], defenders[i].GetComponent<CardState>().card, false);
+                        }
+                    }
+                }
+                break;
         }
     }
     public static void AfterPlayCardAbility(GameObject playedCard, GameObject source, int id)
@@ -183,6 +209,46 @@ public class CardAbility : MonoBehaviour
                 }
                 break;
         }
+    }
+    public static void AfterCardBuying(GameObject bougthtCard, int id, GameObject abilityOwner)
+    {
+        switch (id)
+        {
+            case 9:
+                Character.money += 3;
+                Character.health -= 3;
+                break;
+
+            case 22:
+                abilityOwner.GetComponent<CardState>().card.attack += bougthtCard.GetComponent<CardState>().card.attack;
+                abilityOwner.GetComponent<CardState>().card.health += bougthtCard.GetComponent<CardState>().card.health;
+                GameProcess.UpdateCard(abilityOwner, abilityOwner.GetComponent<CardState>().card, true);
+                break;
+            case 23:
+                if(bougthtCard.GetComponent<CardState>().card.race == Card.Race.Demon)
+                {
+                    abilityOwner.GetComponent<CardState>().card.attack += 3;
+                    abilityOwner.GetComponent<CardState>().card.health += 2;
+                    GameProcess.UpdateCard(abilityOwner, abilityOwner.GetComponent<CardState>().card, true);
+                }
+                break;
+        } 
+    }
+    public static void Revenge(GameObject abilityOwner,int id, List<GameObject> attakers, List<GameObject> defenders)
+    {
+        switch (id) {
+            case 25:
+                for(int i = 0; i < defenders.Count; i++)
+                {
+                    if (defenders[i].GetComponent<CardState>().card.race == Card.Race.Dragon)
+                    {
+                        defenders[i].GetComponent<CardState>().card.attack += 2;
+                        GameProcess.UpdateCard(defenders[i], defenders[i].GetComponent<CardState>().card, true);
+                    }
+                }
+                break;
+        }
+
     }
 
 

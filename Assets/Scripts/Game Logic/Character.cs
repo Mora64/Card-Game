@@ -16,6 +16,7 @@ public class Character : MonoBehaviour
     public static int level = 1;
 
     public static bool lostLastCombat = false;
+    public static int wastedGoldInPreviousTurn = 0;
     public static int Money
     {
         get

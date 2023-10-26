@@ -85,7 +85,7 @@ public class Card
         SpellCraft,
         Revenge,
         AfterSummon,
-
+        AfterCardBuying,
         
 
     }

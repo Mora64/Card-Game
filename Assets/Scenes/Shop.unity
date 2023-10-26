@@ -616,7 +616,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2039168826}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6557301495401590504}
+        m_TargetAssemblyTypeName: UpgradeShop, Assembly-CSharp
+        m_MethodName: Upgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2039168826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,13 +875,33 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6233026322498735109, guid: bc2854bf4ce9c6d46bbde4121ff7f1e5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2039168824}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5961643915514209467, guid: bc2854bf4ce9c6d46bbde4121ff7f1e5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6557301495401590504}
   m_SourcePrefab: {fileID: 100100000, guid: bc2854bf4ce9c6d46bbde4121ff7f1e5, type: 3}
 --- !u!224 &6557301495401590502 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6233026322498735109, guid: bc2854bf4ce9c6d46bbde4121ff7f1e5, type: 3}
   m_PrefabInstance: {fileID: 6557301495401590501}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6557301495401590503 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5961643915514209467, guid: bc2854bf4ce9c6d46bbde4121ff7f1e5, type: 3}
+  m_PrefabInstance: {fileID: 6557301495401590501}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6557301495401590504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557301495401590503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83b8be883f4644be0b47a9159bb5fc9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8618949161075839316
 GameObject:
   m_ObjectHideFlags: 0
